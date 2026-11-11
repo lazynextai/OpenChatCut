@@ -1,4 +1,3 @@
-import { FAL_MODELS } from '../../../shared/fal-models';
 // Set the information architecture of the panel (first-level classification → second-level capability group → third-level provider page → fields) and pure display logic.
 // Three columns: Left tree = Category → Capability; Middle column = Vendor list under this capability; Right column = Configuration page of the selected vendor.
 // Agent LLM saves independent API URLs, API Keys and models for each vendor; the capability to generate classes can be additionally provided
@@ -13,7 +12,6 @@ import {
 import type { CodexAgentStatus } from '../../../shared/codex-agent';
 import type { CopilotAgentStatus } from '../../../shared/copilot-agent';
 import type { ClaudeCodeAgentStatus } from '../../../shared/claude-code-agent';
-import type { VendorId } from './vendorIcons';
 import {
   directory,
   modelPicker,
@@ -48,43 +46,25 @@ export type {
   SettingsVendorPage,
 } from './settingsFields';
 
-const MINIMAX_NOTE = 'MiniMax 同一个 Key，配置一次全能力（生图 / 配音 / 视频 / 音乐）通用。';
-const minimaxPage = (cap: string, modelField: SettingsField, title = 'MiniMax', vendor: VendorId = 'minimax'): SettingsVendorPage => ({
-  key: `${cap}/${vendor}`, vendor, title, note: MINIMAX_NOTE,
-  fields: [
-    secret('MINIMAX_API_KEY', 'API Key'),
-    text('MINIMAX_BASE_URL', 'Base URL', '默认 https://api.minimaxi.com'),
-    modelField,
-  ],
-});
+import { byteplusPage, falPage, minimaxPage } from './settingsGenerationPages';
 
-// BytePlus ModelArk serves image (Seedream) and video (Seedance) from the same Key/Base URL,
-// separate from LLM_BYTEPLUS_* (Agent chat) — same sharing convention as MiniMax above.
-const BYTEPLUS_NOTE = 'BytePlus ModelArk 同一个 Key，图生 / 视频生成通用；与「Agent 大脑」的 BytePlus 配置各自独立。';
-const byteplusPage = (cap: string, modelField: SettingsField, title = 'BytePlus · ModelArk'): SettingsVendorPage => ({
-  key: `${cap}/byteplus`, vendor: 'byteplus', title, note: BYTEPLUS_NOTE,
-  fields: [
-    secret('BYTEPLUS_API_KEY', 'API Key'),
-    text('BYTEPLUS_BASE_URL', 'Base URL', '默认 https://ark.ap-southeast.bytepluses.com/api/v3'),
-    modelField,
+// Basic web research provider (web_search / web_browser). Parallel is the keyless
+// Search MCP compiled into the server; Firecrawl needs its API key. One select keeps
+// the value in the WEB_SEARCH_PROVIDER keystore slot, so a future provider (e.g.
+// Keenable) is one more option here and no wiring changes.
+export const WEB_SEARCH_PROVIDER_FIELD: SettingsField = {
+  name: 'WEB_SEARCH_PROVIDER',
+  label: '网页搜索提供商',
+  kind: 'select',
+  note: 'Parallel 免 Key 即可搜索网页；Firecrawl 需要 API Key。停用后 web_search / web_browser 直接报错。留空等同 Firecrawl。',
+  options: [
+    { value: '', label: '默认（Firecrawl，需 Key）' },
+    { value: 'firecrawl', label: 'Firecrawl（需 Key）' },
+    { value: 'parallel', label: 'Parallel（免 Key）' },
+    { value: 'keenable', label: 'Keenable' },
+    { value: 'disabled', label: '停用网页搜索' },
   ],
-});
-
-const falPage = (cap: 'image' | 'video'): SettingsVendorPage => ({
-  key: `${cap}/fal`, vendor: 'fal', title: 'Fal.ai',
-  note: '选择 Fal.ai 作为默认厂商，然后选择模型。聊天中指定的模型优先于此默认值。',
-  fields: [
-    secret('FAL_KEY', 'API Key'),
-    {
-      name: cap === 'image' ? 'FAL_IMAGE_MODEL' : 'FAL_VIDEO_MODEL',
-      label: cap === 'image' ? '生图模型' : '视频模型', kind: 'select',
-      options: [
-        { value: '', label: '每次询问（默认）' },
-        ...FAL_MODELS.filter((model) => model.kind === cap).map(({ id, label }) => ({ value: id, label })),
-      ],
-    },
-  ],
-});
+};
 
 export const SETTINGS_CATEGORIES: readonly SettingsCategory[] = [
   {
@@ -234,6 +214,24 @@ export const SETTINGS_CATEGORIES: readonly SettingsCategory[] = [
               text('SONILO_BASE_URL', 'Base URL', '默认 https://api.sonilo.com'),
             ] },
         ] },
+      { key: 'sound', title: '音效 / SFX',
+        hint: 'submit_sound · 文字生成音效，或按成片生成音效，任一厂商即可。',
+        vendors: [
+          { key: 'sound/elevenlabs', vendor: 'elevenlabs', title: 'ElevenLabs',
+            note: '与「配音 / TTS」共用 ELEVENLABS_API_KEY；eleven_text_to_sound_v2 支持 loop 循环与 0.5–30 秒时长。',
+            fields: [
+              secret('ELEVENLABS_API_KEY', 'API Key'),
+              text('ELEVENLABS_BASE_URL', 'Base URL', '默认 https://api.elevenlabs.io'),
+              modelPicker('ELEVENLABS_SOUND_MODEL', '音效模型', 'eleven_text_to_sound_v2',
+                ['eleven_text_to_sound_v2']),
+            ] },
+          { key: 'sound/sonilo', vendor: 'sonilo', title: 'Sonilo',
+            note: '按成片生成音效：把渲染好的视频交给 Sonilo，免版税、可商用（以条款为准）；同一个 Key 也用于按成片生成配乐。',
+            fields: [
+              secret('SONILO_API_KEY', 'API Key'),
+              text('SONILO_BASE_URL', 'Base URL', '默认 https://api.sonilo.com'),
+            ] },
+        ] },
     ],
   },
   {
@@ -291,8 +289,15 @@ export const SETTINGS_CATEGORIES: readonly SettingsCategory[] = [
                 '默认模板不带 ffmpeg；转码 / 抽帧类任务需自建含 ffmpeg 的模板并填其 ID。'),
             ] },
         ] },
-      { key: 'web', title: '网页抓取', hint: 'web_browser · 抓取网页内容供 Agent 参考。',
+      { key: 'web', title: '网页抓取', hint: 'web_browser · web_search · 网页检索与抓取（Keenable 免 Key）。',
+        route: WEB_SEARCH_PROVIDER_FIELD,
         vendors: [
+          { key: 'web/keenable', vendor: 'keenable', title: 'Keenable',
+            note: '免账号、免 API Key 的网页检索与阅读：web_search 返回标题、URL 和摘要，web_browser 返回页面 Markdown。'
+              + '在「搜索 / 网页阅读」中选择 Keenable 后，无需填 Key 即可用；匿名接口按 IP 限流（每秒 10 次、每小时 1000 次）。'
+              + '可选填 Keenable API Key 仅用于提升限流，不填也能用。截图、页面动作、结构化提取、'
+              + '其它格式与站点映射/爬取/批量抓取始终走 Firecrawl。',
+            fields: [secret('KEENABLE_API_KEY', 'API Key（可选，仅提升限流）')] },
           { key: 'web/firecrawl', vendor: 'firecrawl', title: 'Firecrawl',
             fields: [secret('FIRECRAWL_API_KEY', 'API Key')] },
         ] },
@@ -305,6 +310,8 @@ export const SETTINGS_CATEGORIES: readonly SettingsCategory[] = [
             fields: [
               secret('UPLOAD_POST_API_KEY', 'API Key'),
               text('UPLOAD_POST_PROFILE', 'Profile', undefined, '在 Upload-Post 控制台创建、已连接社交账号的 Profile 名称。'),
+              text('UPLOAD_POST_BASE_URL', 'Base URL', '默认 https://api.upload-post.com',
+                '自建 / 代理部署时填写自己的 Upload-Post 地址。'),
             ] },
         ] },
     ],

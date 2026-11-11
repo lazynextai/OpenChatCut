@@ -35,11 +35,23 @@ const overrides: Record<string, string> = {
   '增强工具': 'Strumenti avanzati',
   '沙箱执行': 'Esecuzione sandbox',
   '网页抓取': 'Acquisizione web',
+  '网页搜索提供商': 'Provider di ricerca web',
+  'Parallel 免 Key 即可搜索网页；Firecrawl 需要 API Key。停用后 web_search / web_browser 直接报错。留空等同 Firecrawl。':
+    'Parallel cerca sul web senza chiave; Firecrawl richiede la sua API key. Se disattivato, web_search / web_browser falliscono subito. Lasciato vuoto equivale a Firecrawl.',
+  '默认（Firecrawl，需 Key）': 'Predefinito (Firecrawl, richiede chiave)',
+  'Firecrawl（需 Key）': 'Firecrawl (richiede chiave)',
+  'Parallel（免 Key）': 'Parallel (nessuna chiave)',
+  '停用网页搜索': 'Disattiva ricerca web',
   '发布到社交平台': 'Pubblicazione social',
   'publish_to_social · 把导出的成片发布到 TikTok、Instagram、YouTube 等平台。': 'publish_to_social · pubblica i video esportati su TikTok, Instagram, YouTube e altre piattaforme.',
   '一个 Key 发布到 TikTok、Instagram、YouTube、LinkedIn、Facebook、X、Threads、Pinterest、Bluesky。先在 Upload-Post 创建一个 Profile 并连接各平台账号，再把 Profile 名称填在下面。Agent 发布前总会先预览平台、标题与视频，等你确认后才上传；YouTube 默认私密。':
     'Una sola chiave pubblica su TikTok, Instagram, YouTube, LinkedIn, Facebook, X, Threads, Pinterest e Bluesky. Crea un profilo in Upload-Post, collega i tuoi account e inserisci qui sotto il nome del profilo. L’Agent mostra sempre un’anteprima di piattaforme, titolo e video e attende la tua conferma prima di caricare; YouTube è privato per impostazione predefinita.',
   '在 Upload-Post 控制台创建、已连接社交账号的 Profile 名称。': 'Nome del profilo Upload-Post (creato nella dashboard di Upload-Post, con gli account social collegati).',
+  '自建 / 代理部署时填写自己的 Upload-Post 地址。': 'Inserisci il tuo endpoint Upload-Post se lo ospiti tu o passi da un proxy.',
+  '音效 / SFX': 'Effetti / SFX',
+  'submit_sound · 文字生成音效，或按成片生成音效，任一厂商即可。': 'submit_sound · Genera effetti da testo o dal montaggio finito; basta un fornitore.',
+  '与「配音 / TTS」共用 ELEVENLABS_API_KEY；eleven_text_to_sound_v2 支持 loop 循环与 0.5–30 秒时长。': 'Condivide ELEVENLABS_API_KEY con Voce / TTS; eleven_text_to_sound_v2 supporta loop e durate da 0,5 a 30 s.',
+  '按成片生成音效：把渲染好的视频交给 Sonilo，免版税、可商用（以条款为准）；同一个 Key 也用于按成片生成配乐。': 'Effetti dal montaggio finito: il video renderizzato va a Sonilo, royalty-free e utilizzabile commercialmente (vedi termini); la stessa chiave crea anche la colonna sonora.',
   '网络代理': 'Proxy di rete',
   '界面': 'Interfaccia',
   '显示': 'Visualizzazione',
@@ -63,6 +75,11 @@ const overrides: Record<string, string> = {
   '工程与素材的本地保存目录，与可选的 R2 云备份。': 'Cartelle locali di progetti e media, con backup R2 opzionale.',
   'run_code · 云端沙箱运行 ffmpeg / node / python。': 'run_code · esegue ffmpeg / node / python in una sandbox cloud.',
   'web_browser · 抓取网页内容供 Agent 参考。': 'web_browser · acquisisce pagine web come riferimento per l’Agent.',
+  'web_browser · web_search · 网页检索与抓取（Keenable 免 Key）。': 'web_browser · web_search · ricerca e acquisizione web (Keenable non richiede chiave).',
+  'Firecrawl（默认）': 'Firecrawl (predefinito)',
+  'API Key（可选，仅提升限流）': 'API key (opzionale, aumenta solo i limiti di frequenza)',
+  '免账号、免 API Key 的网页检索与阅读：web_search 返回标题、URL 和摘要，web_browser 返回页面 Markdown。在「搜索 / 网页阅读」中选择 Keenable 后，无需填 Key 即可用；匿名接口按 IP 限流（每秒 10 次、每小时 1000 次）。可选填 Keenable API Key 仅用于提升限流，不填也能用。截图、页面动作、结构化提取、其它格式与站点映射/爬取/批量抓取始终走 Firecrawl。':
+    'Ricerca web e lettura pagine senza account e senza API key: web_search restituisce titoli, URL e frammenti, web_browser restituisce la pagina in Markdown. Scegli Keenable in «Ricerca / lettura pagine» e funziona senza chiave; gli endpoint anonimi sono limitati per IP (10 al secondo, 1.000 all’ora). Una API key Keenable è opzionale e aumenta solo questi limiti. Screenshot, azioni sulla pagina, estrazione strutturata, altri formati e mappatura / crawling / scraping in batch passano sempre da Firecrawl.',
 
   '默认厂商': 'Provider predefinito',
   '接口格式': 'Formato API',
@@ -301,6 +318,7 @@ const overrides: Record<string, string> = {
 
   '本地模型按需安装，索引、转写和分析都在本机完成。': 'I modelli locali si installano su richiesta; indicizzazione, trascrizione e analisi restano su questo PC.',
   '转写语言': 'Lingua trascrizione',
+  '跟随界面语言': 'Segui la lingua dell’interfaccia',
   '说话人分离': 'Separazione parlanti',
   '本地模型（whisper）': 'Modello locale (Whisper)',
   '转写在本机完成：免费、离线、素材不出本机。模型需先下载，下载与删除在 本地模型 → 本地转写 页（点下方按钮前往）。自动选择设备优势后端：WebGPU 不可用时回退 CPU。本地转写不含说话人分离（全部归为同一位说话人）。': 'La trascrizione avviene su questo PC: gratuita, offline, con media che non lasciano la macchina. I modelli vanno prima scaricati: si scaricano ed eliminano nella pagina Modelli locali → Trascrizione locale (usa il pulsante qui sotto). Se WebGPU non è disponibile torna alla CPU. La trascrizione locale non include la separazione parlanti.',
@@ -419,6 +437,7 @@ const overrides: Record<string, string> = {
   '默认 https://api.mistral.ai/v1': 'Predefinito: https://api.mistral.ai/v1',
   '默认 https://api.mureka.ai': 'Predefinito: https://api.mureka.ai',
   '默认 https://api.openai.com': 'Predefinito: https://api.openai.com',
+  '默认 https://api.upload-post.com': 'Predefinito: https://api.upload-post.com',
   '默认 https://api.sonilo.com': 'Predefinito: https://api.sonilo.com',
   '默认 https://ark.cn-beijing.volces.com/api/v3': 'Predefinito: https://ark.cn-beijing.volces.com/api/v3',
   '默认 https://generativelanguage.googleapis.com': 'Predefinito: https://generativelanguage.googleapis.com',
@@ -452,6 +471,9 @@ const overrides: Record<string, string> = {
   '默认工程位置': 'Posizione predefinita dei progetti',
   '新建工程、历史版本和应用生成的素材保存在这里。桌面端从外部拖入的文件和文件夹保留在原位置，工程只建立引用；浏览器运行时会上传托管副本。修改后重启应用生效。': 'Qui vengono salvati i nuovi progetti, la cronologia delle versioni e i media generati dall’app. Sul desktop i file e le cartelle trascinati dall’esterno restano nella posizione originale e il progetto crea solo un riferimento; nel browser viene caricata una copia gestita. La modifica si applica dopo il riavvio.',
   '未配置时素材只存本机。配置后：每次上传同步写入 R2（桶保持私有，读取经本地服务回源，src 路径不变）；本机缺文件时自动从云端取回。改动即时生效。R2 控制台建桶 → R2 API Token（Object Read & Write）即可拿到下面四个值。': 'Senza configurazione i media restano solo sul computer. Dopo la configurazione ogni caricamento viene scritto anche su R2; il bucket resta privato, la lettura passa dal servizio locale e il percorso src non cambia. Se manca un file locale, viene recuperato automaticamente dal cloud. Le modifiche hanno effetto immediato. Crea un bucket nella console R2 e un token API R2 con Object Read & Write per ottenere i quattro valori seguenti.',
+  '该模型已于 {date} 停用': 'Questo modello è stato disattivato il {date}',
+  '该模型将于 {date} 停用': 'Questo modello verrà disattivato il {date}',
+  '建议改用 {model}': 'Usa {model} invece',
 };
 
 export default overrides;

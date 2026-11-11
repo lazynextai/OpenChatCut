@@ -8,6 +8,7 @@ import { proxyDispatcher } from './outbound-proxy.ts';
 import { getKey, KEY_NAMES, type KeyName } from './keystore.ts';
 import { r2Probe } from './r2.ts';
 import { mediaDirProbe, mediaDirPostCheck, mediaDirOkText } from './media-dir.ts';
+import { keenableProbe } from './key-probes-keenable.ts';
 import {
   AI_SDK_BASE_URL_FORMAT,
   resolveLlmBaseUrl,
@@ -33,35 +34,14 @@ import {
   type ProbeResult,
 } from './key-probe-result.ts';
 import { PROBE_TIMEOUT_MS, runDataDirProbe, runProxyProbe } from './key-probe-local.ts';
+import { falProbe, localAsrProbe } from './key-probe-media.ts';
 export { classifyStatus, networkMessage, parseModelCatalog, type ProbeResult } from './key-probe-result.ts';
 export { doubaoPostCheck, minimaxPostCheck } from './key-probe-result.ts';
 export { runDataDirProbe, runProxyProbe } from './key-probe-local.ts';
+export { probeUrlError } from './key-probe-url.ts';
+import { type FetchInit, probeUrlError } from './key-probe-url.ts';
 // Proxy-aware fetch: attaches the configured outbound proxy (keystore
 // PROXY_URL or HTTPS_PROXY/HTTP_PROXY env) via undici dispatcher.
-type FetchInit = Parameters<typeof fetch>[1] & { dispatcher?: unknown };
-
-// Probes send REAL stored credentials to a user/agent-settable base URL.
-// Loopback and private hosts stay allowed (local models and LAN gateways are
-// legitimate), but cloud metadata / link-local targets and credential-bearing
-// or non-http(s) URLs never are — those only appear in SSRF exfil attempts.
-export function probeUrlError(url: RequestInfo | URL): string | null {
-  let parsed: URL;
-  try {
-    parsed = new URL(String(url));
-  } catch {
-    return '探测地址不是合法 URL';
-  }
-  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-    return `探测地址协议不支持:${parsed.protocol}`;
-  }
-  if (parsed.username || parsed.password) return '探测地址不允许携带内嵌凭据';
-  const host = parsed.hostname.replace(/^\[|\]$/g, '').toLowerCase();
-  if (/^169\.254\.\d{1,3}\.\d{1,3}$/.test(host) || host.startsWith('fe80:')
-    || host === 'metadata.google.internal') {
-    return '探测地址指向云元数据/链路本地网段,已拒绝';
-  }
-  return null;
-}
 
 const fetchWithProxy = (url: RequestInfo | URL, init?: FetchInit): Promise<Response> => {
   const unsafe = probeUrlError(url);
@@ -72,7 +52,7 @@ const fetchWithProxy = (url: RequestInfo | URL, init?: FetchInit): Promise<Respo
 
 type Get = (name: KeyName) => string;
 
-interface ProbeDef {
+export interface ProbeDef {
   /** Starting test threshold: OR of AND-groups (every name in one inner list must be present) */
   readonly needs: readonly (readonly KeyName[])[];
   readonly run: (get: Get) => Promise<Response>;
@@ -242,6 +222,15 @@ const cheaperInferenceProbe: ProbeDef = {
   models: parseTextModelCatalog,
 };
 
+// Read-only account endpoint; a fake key → 401. The same key also serves
+// /generate/sound (video-to-SFX), so one probe covers both capability pages.
+const soniloProbe: ProbeDef = {
+  needs: [['SONILO_API_KEY']],
+  run: (get) => fetch(`${base(get, 'SONILO_BASE_URL', 'https://api.sonilo.com')}/v1/account/services`, {
+    signal: t(), headers: bearer(get('SONILO_API_KEY')),
+  }),
+};
+
 
 /** page key (same name as the vendor page key of settingsSchema) → detection definition.*/
 export const PROBES: Record<string, ProbeDef> = {
@@ -268,6 +257,8 @@ export const PROBES: Record<string, ProbeDef> = {
     }),
     models: parseModelCatalog,
   },
+  // Fal has no read-only auth endpoint; Gemini Omni reuses the cheap model list.
+  'image/fal': falProbe, 'video/fal': falProbe, 'video/gemini-omni': geminiMediaProbe, 'transcription/local': localAsrProbe,
   'image/wavespeed': {
     needs: [['WAVESPEED_API_KEY']],
     run: (get) => fetch(`${base(get, 'WAVESPEED_BASE_URL', 'https://api.wavespeed.ai')}/api/v3/balance`, {
@@ -356,14 +347,7 @@ export const PROBES: Record<string, ProbeDef> = {
   },
   'music/minimax': minimaxProbe,
   'music/atlas': atlasMusicProbe,
-  // Read-only account endpoint; fake key → 401. The same key also serves
-  // /generate/sound (video-to-SFX), so one probe covers both capabilities.
-  'music/sonilo': {
-    needs: [['SONILO_API_KEY']],
-    run: (get) => fetch(`${base(get, 'SONILO_BASE_URL', 'https://api.sonilo.com')}/v1/account/services`, {
-      signal: t(), headers: bearer(get('SONILO_API_KEY')),
-    }),
-  },
+  'music/sonilo': soniloProbe, 'sound/sonilo': soniloProbe, 'sound/elevenlabs': elevenLabsProbe,
   // /v1/search has been opened to anonymous users (the measured number is 200 without key), and the key; collections cannot be detected
   // It is the account binding endpoint, and the fake key is stable 401.
   'stock/pexels': {
@@ -419,6 +403,9 @@ export const PROBES: Record<string, ProbeDef> = {
       signal: t(), headers: bearer(get('FIRECRAWL_API_KEY')),
     }),
   },
+  // Keenable asks for no account: the public path answers with only the app
+  // identifier header, so "Test connection" succeeds with no key.
+  'web/keenable': keenableProbe,
   // Read-only account endpoint; a fake key is a stable 401. Upload-Post keys
   // use the `Apikey` scheme, not `Bearer`.
   'publish/upload-post': {

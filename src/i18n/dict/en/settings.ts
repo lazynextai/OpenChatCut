@@ -36,11 +36,24 @@ export default {
   '增强工具': 'Power Tools',
   '沙箱执行': 'Sandbox Execution',
   '网页抓取': 'Web Scraping',
+  '网页搜索提供商': 'Web search provider',
+  'Parallel 免 Key 即可搜索网页；Firecrawl 需要 API Key。停用后 web_search / web_browser 直接报错。留空等同 Firecrawl。':
+    'Parallel searches the web with no key; Firecrawl needs its API key. When disabled, web_search / web_browser fail fast. Leaving it empty behaves like Firecrawl.',
+  '默认（Firecrawl，需 Key）': 'Default (Firecrawl, key required)',
+  'Firecrawl（需 Key）': 'Firecrawl (key required)',
+  'Parallel（免 Key）': 'Parallel (no key needed)',
+  '停用网页搜索': 'Disable web search',
   '发布到社交平台': 'Social Publishing',
   'publish_to_social · 把导出的成片发布到 TikTok、Instagram、YouTube 等平台。': 'publish_to_social · Publish finished exports to TikTok, Instagram, YouTube and more.',
   '一个 Key 发布到 TikTok、Instagram、YouTube、LinkedIn、Facebook、X、Threads、Pinterest、Bluesky。先在 Upload-Post 创建一个 Profile 并连接各平台账号，再把 Profile 名称填在下面。Agent 发布前总会先预览平台、标题与视频，等你确认后才上传；YouTube 默认私密。':
     'One key publishes to TikTok, Instagram, YouTube, LinkedIn, Facebook, X, Threads, Pinterest and Bluesky. Create a profile in Upload-Post, connect your accounts to it, then enter the profile name below. The Agent always previews the platforms, title and video and waits for your confirmation before uploading; YouTube defaults to private.',
   '在 Upload-Post 控制台创建、已连接社交账号的 Profile 名称。': 'The Upload-Post profile name (created in the Upload-Post dashboard, with your social accounts connected).',
+  '自建 / 代理部署时填写自己的 Upload-Post 地址。': 'Enter your own Upload-Post endpoint when self-hosting or going through a proxy.',
+  '音效 / SFX': 'Sound / SFX',
+  'submit_sound · 文字生成音效，或按成片生成音效，任一厂商即可。': 'submit_sound · Generate effects from text or from the finished cut; any one vendor works.',
+  '与「配音 / TTS」共用 ELEVENLABS_API_KEY；eleven_text_to_sound_v2 支持 loop 循环与 0.5–30 秒时长。': 'Shares ELEVENLABS_API_KEY with Voice / TTS; eleven_text_to_sound_v2 supports looping and 0.5–30 s durations.',
+  '按成片生成音效：把渲染好的视频交给 Sonilo，免版税、可商用（以条款为准）；同一个 Key 也用于按成片生成配乐。': 'Effects from the finished cut: the rendered video goes to Sonilo, royalty-free and commercially usable (see terms); the same key also scores the cut.',
+  '音效模型': 'Sound model',
   'Anthropic / 兼容 API': 'Anthropic / Compatible API',
   'Anthropic / OpenAI': 'Anthropic / OpenAI',
   '模型供应商': 'Model providers',
@@ -62,6 +75,11 @@ export default {
   '素材的本地保存目录，与可选的 R2 云备份。': 'Local save directory for media, plus optional R2 cloud backup.',
   'run_code · 云端沙箱运行 ffmpeg / node / python。': 'run_code · Run ffmpeg / node / python in a cloud sandbox.',
   'web_browser · 抓取网页内容供 Agent 参考。': 'web_browser · Fetch web pages for the Agent to reference.',
+  'web_browser · web_search · 网页检索与抓取（Keenable 免 Key）。': 'web_browser · web_search · Web search and page reads (Keenable needs no key).',
+  'Firecrawl（默认）': 'Firecrawl (default)',
+  'API Key（可选，仅提升限流）': 'API key (optional, only raises rate limits)',
+  '免账号、免 API Key 的网页检索与阅读：web_search 返回标题、URL 和摘要，web_browser 返回页面 Markdown。在「搜索 / 网页阅读」中选择 Keenable 后，无需填 Key 即可用；匿名接口按 IP 限流（每秒 10 次、每小时 1000 次）。可选填 Keenable API Key 仅用于提升限流，不填也能用。截图、页面动作、结构化提取、其它格式与站点映射/爬取/批量抓取始终走 Firecrawl。':
+    'Web search and page reading with no account and no API key: web_search returns titles, URLs and snippets, web_browser returns the page as Markdown. Pick Keenable under "Search / page reading" and it works with no key; the anonymous endpoints are rate-limited per IP (10 per second, 1,000 per hour). A Keenable API key is optional and only raises those limits. Screenshots, page actions, structured extraction, other formats and mapping / crawling / batch scraping always go through Firecrawl.',
 
   // ── Field label ──
   '默认厂商': 'Default vendor',
@@ -91,7 +109,6 @@ export default {
   'API Key（Nano Banana）': 'API Key (Nano Banana)',
   '生图模型': 'Image model',
   '配音模型': 'Voice model',
-  '音效模型': 'Sound model',
   '视频模型': 'Video model',
   '音乐模型': 'Music model',
   '云同步': 'Cloud sync',
@@ -99,6 +116,7 @@ export default {
   '模板 ID（可选）': 'Template ID (optional)',
   '转写模型': 'Transcription model',
   '转写语言': 'Transcription language',
+  '跟随界面语言': 'Follow the UI language',
   '说话人分离': 'Speaker diarization',
 
   // ── routing options ──
@@ -368,6 +386,7 @@ export default {
   '按厂商使用官方默认地址': 'Use the selected provider’s official endpoint',
   '按厂商自动选择': 'Auto by provider',
   '默认 https://api.openai.com': 'Default https://api.openai.com',
+  '默认 https://api.upload-post.com': 'Default https://api.upload-post.com',
   '默认 https://generativelanguage.googleapis.com': 'Default https://generativelanguage.googleapis.com',
   '默认 https://api.elevenlabs.io': 'Default https://api.elevenlabs.io',
   '默认 https://openspeech.bytedance.com': 'Default https://openspeech.bytedance.com',
@@ -616,4 +635,7 @@ export default {
   '桌面端点击“选择目录”；也可手动输入绝对路径（可用 ~/ 开头）。清除后回到默认目录。': 'On desktop, click "Choose folder"; you can also type an absolute path (~/ accepted). Clear it to return to the default folder.',
   '已保存 · 重启应用后新的工程存储目录才会生效': 'Saved · the new project storage folder takes effect after a restart',
   '该模型不在内置目录，以上数值为估算（上下文 {context} / 输出 {output}）。若与实际不符，点「展开」手动修改。': 'This model is not in the built-in catalog, so these values are estimates (context {context} / output {output}). If they do not match the real model, expand and adjust them manually.',
+  '该模型已于 {date} 停用': 'This model was shut down on {date}',
+  '该模型将于 {date} 停用': 'This model will be shut down on {date}',
+  '建议改用 {model}': 'Use {model} instead',
 } as Record<string, string>;

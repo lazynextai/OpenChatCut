@@ -16,7 +16,9 @@ const COMMON_TRANSCRIPTION_FIELDS: readonly SettingsField[] = [
     name: 'TRANSCRIPTION_LANGUAGE',
     label: '转写语言',
     kind: 'select',
-    defaultLabel: '中文（zh）',
+    // The runtime default is the app locale (see preferredTranscriptionLanguage),
+    // so the option that clears the setting must say so, not name zh.
+    defaultLabel: '跟随界面语言',
     options: [
       { value: 'zh', label: '中文（zh）' },
       { value: 'en', label: '英语（en）' },
@@ -173,7 +175,7 @@ export const VOICE_SETTINGS_GROUP: SettingsGroup = {
       key: 'voice/gemini', vendor: 'gemini', title: 'Google Gemini', fields: [
         secret('GEMINI_API_KEY', 'API Key'),
         text('GEMINI_BASE_URL', 'Base URL', '默认 https://generativelanguage.googleapis.com'),
-        modelText('GEMINI_TTS_MODEL', '配音模型', 'gemini-2.5-flash-preview-tts'),
+        modelText('GEMINI_TTS_MODEL', '配音模型', 'gemini-3.8-flash-tts'),
       ],
     },
     {
@@ -247,6 +249,8 @@ export const ROUTE_NEEDS: Record<string, readonly (readonly string[])[]> = {
   'grok-imagine': [['LLM_XAI_OAUTH_API_KEY'], ['LLM_XAI_API_KEY']],
   'agnes-image': [['AGNES_IMAGE_API_KEY']],
   'agnes-video': [['AGNES_VIDEO_API_KEY']],
+  wavespeed: [['WAVESPEED_API_KEY']],
+  byteplus: [['BYTEPLUS_API_KEY']],
   'grok-imagine-video': [['LLM_XAI_OAUTH_API_KEY'], ['LLM_XAI_API_KEY']],
   ofox: [['LLM_OFOX_API_KEY']],
   elevenlabs: [['ELEVENLABS_API_KEY']],
