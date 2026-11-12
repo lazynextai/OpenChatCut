@@ -1,7 +1,7 @@
 import { startUiLocaleSync } from '../i18n/localeSync';
 import { t } from '../i18n/locale';
 import { useCallback, useEffect, useState } from 'react';
-import { applyLiveCaps, applyLiveKeyStatus, applyLiveModels, applyLocalTranscriptionReady } from '../agent/capabilities';
+import { applyLiveCaps, applyLiveKeyStatus, applyLiveModels, applyLocalTranscriptionReady, type LocalTierReadiness } from '../agent/capabilities';
 import { fetchCodexModels, fetchCodexStatus } from '../agent/codex/client';
 import { fetchCopilotModels, fetchCopilotStatus } from '../agent/copilot/client';
 import { fetchClaudeCodeModels, fetchClaudeCodeStatus } from '../agent/claude-code/client';
@@ -51,16 +51,18 @@ export function navigateTo(hash: string): void {
 
 /**
  * Free local Whisper is invisible to the key store: a downloaded tier is what
- * makes transcription available without a provider or API key. Deliberate lazy
- * boundary — the ASR catalog client must not join the startup bundle.
+ * makes transcription available without a provider or API key. Tri-state so an
+ * unreadable catalog is reported as unknown, never as "no model downloaded".
+ * Deliberate lazy boundary — the ASR catalog client must not join the startup bundle.
  */
-async function probeLocalTranscription(): Promise<boolean> {
+async function probeLocalTranscription(): Promise<LocalTierReadiness> {
   try {
     const { anyLocalAsrReady, fetchLocalAsrCatalog } = await import('../transcript/local-asr-readiness');
     const catalog = await fetchLocalAsrCatalog();
-    return catalog !== null && anyLocalAsrReady(catalog);
+    if (catalog === null) return 'unknown';
+    return anyLocalAsrReady(catalog) ? 'ready' : 'empty';
   } catch {
-    return false;
+    return 'unknown';
   }
 }
 
@@ -123,7 +125,7 @@ export async function syncAgentBackends(isActive: () => boolean): Promise<void> 
     if (caps) applyLiveCaps(caps);
     if (keys) applyLiveKeyStatus(keys);
     // Set after applyLiveCaps so a startup snapshot cannot overwrite it.
-    applyLocalTranscriptionReady(localAsrResult.status === 'fulfilled' && localAsrResult.value === true);
+    applyLocalTranscriptionReady(localAsrResult.status === 'fulfilled' ? localAsrResult.value : 'unknown');
     if (models) {
       applyLiveModels(models);
       applyAgentModelStatus(keys ?? {}, models);

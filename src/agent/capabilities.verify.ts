@@ -2,7 +2,7 @@
 // (no vite define) fallback of the configured-capabilities manifest.
 //   npx tsx src/agent/capabilities.verify.ts
 import assert from 'node:assert/strict';
-import { applyLiveKeyStatus, applyLiveModels, capabilitiesPrompt, CONFIGURED_CAPS, type CapabilityKey } from './capabilities';
+import { applyLiveCaps, applyLiveKeyStatus, applyLiveModels, applyLocalTranscriptionReady, capabilitiesPrompt, currentCaps, CONFIGURED_CAPS, type CapabilityKey } from './capabilities';
 
 const ALL_OFF: Record<CapabilityKey, boolean> = {
   image: false, voice: false, video: false, music: false, sound: false,
@@ -131,8 +131,6 @@ assert.ok(agnes.includes('user default: Agnes Video(model=agnes-video) — use i
 applyLiveKeyStatus({});
 applyLiveModels({});
 
-console.log('capabilities.verify: ok');
-
 applyLiveModels({ WEB_SEARCH_PROVIDER: 'disabled' });
 assert.match(capabilitiesPrompt(ALL_OFF), /page reading are disabled by the server/);
 applyLiveModels({});
@@ -161,3 +159,51 @@ assert.ok(firecrawlStock.includes('only FIRECRAWL_API_KEY is configured'),
 assert.ok(firecrawlStock.includes('do not pass platforms=firecrawl'),
   'Firecrawl is not advertised as a platforms value');
 applyLiveKeyStatus({});
+
+// ── web capability LEVEL: keyless providers advertise basic search only ──
+applyLiveKeyStatus({});
+applyLiveModels({ WEB_SEARCH_PROVIDER: 'parallel' });
+const keylessWeb = capabilitiesPrompt({ ...ALL_OFF, web: true });
+assert.ok(keylessWeb.includes('Web search + page reading(web_search/web_browser'),
+  'keyless web lists basic search + page reading as the capability');
+assert.ok(keylessWeb.includes('markdown pages only'), 'keyless web states the markdown-only level');
+assert.ok(!keylessWeb.includes('web_map/web_crawl/web_batch_scrape and Firecrawl page formats'),
+  'keyless web does NOT advertise the Firecrawl advanced row');
+assert.ok(keylessWeb.includes('need FIRECRAWL_API_KEY and are unavailable — do not call them'),
+  'keyless web names the refused tools explicitly');
+applyLiveModels({ WEB_SEARCH_PROVIDER: 'keenable' });
+assert.ok(capabilitiesPrompt({ ...ALL_OFF, web: true }).includes('need FIRECRAWL_API_KEY and are unavailable'),
+  'Keenable is keyless too: same basic-only level');
+
+applyLiveKeyStatus({ FIRECRAWL_API_KEY: { configured: true } });
+const fullWeb = capabilitiesPrompt({ ...ALL_OFF, web: true });
+assert.ok(fullWeb.includes('Advanced web extraction(web_map/web_crawl/web_batch_scrape and Firecrawl page formats)'),
+  'a Firecrawl key keeps the full advanced-extraction description');
+assert.ok(!fullWeb.includes('need FIRECRAWL_API_KEY and are unavailable'),
+  'Firecrawl key → no "unavailable" caveat');
+applyLiveKeyStatus({});
+applyLiveModels({});
+
+// ── local transcription needs a downloaded tier, not only provider=local ──
+// The server claims transcription for PREFERRED_TRANSCRIPTION_PROVIDER=local; the
+// client readiness probe corrects it when no tier exists, but never when unobserved.
+applyLiveCaps({ ...ALL_OFF, transcription: true });
+applyLiveModels({ PREFERRED_TRANSCRIPTION_PROVIDER: 'local' });
+applyLiveKeyStatus({});
+applyLocalTranscriptionReady('empty');
+assert.equal(currentCaps().transcription, false, 'local provider + empty catalog → transcription off');
+applyLocalTranscriptionReady('ready');
+assert.equal(currentCaps().transcription, true, 'a downloaded tier → transcription on');
+applyLocalTranscriptionReady('unknown');
+assert.equal(currentCaps().transcription, true, 'unreadable catalog → server claim preserved (no false downgrade)');
+applyLocalTranscriptionReady('empty');
+applyLiveKeyStatus({ ASSEMBLYAI_API_KEY: { configured: true } });
+assert.equal(currentCaps().transcription, true, 'a cloud transcription key survives an empty local catalog');
+applyLiveKeyStatus({});
+applyLocalTranscriptionReady('ready');
+assert.equal(currentCaps().transcription, true, 'downloaded tier upgrades an off manifest (regression: user with small)');
+applyLiveCaps(ALL_OFF);
+applyLiveModels({});
+applyLocalTranscriptionReady('unknown');
+
+console.log('capabilities.verify: ok');

@@ -124,7 +124,7 @@ export function LocalAsrPane({ fields, ctx }: { fields: readonly SettingsField[]
       setLoadError(null);
       // The free local engine is a real transcription path: keep the capability
       // banner honest as tiers are downloaded or deleted.
-      applyLocalTranscriptionReady(anyLocalAsrReady(models));
+      applyLocalTranscriptionReady(anyLocalAsrReady(models) ? 'ready' : 'empty');
       const current = new Set(models.filter((m) => m.task?.status === 'downloading').map((m) => m.id));
       // A download just finished: warm the configured model with this catalog
       // snapshot, avoiding a duplicate API request.

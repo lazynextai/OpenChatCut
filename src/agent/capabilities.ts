@@ -35,17 +35,35 @@ export function applyLiveCaps(caps: Partial<Record<CapabilityKey, boolean>>): vo
 
 // The free on-device Whisper engine needs no key, so the server-side key
 // computation cannot see it: a downloaded ASR tier (GET /api/asr-models) is the
-// only proof it can run. Reported separately because a later applyLiveCaps from
-// Settings must not forget a model that is already on disk, and it never
-// downgrades a configured cloud provider.
-let localTranscriptionReady = false;
-export function applyLocalTranscriptionReady(ready: boolean): void {
-  localTranscriptionReady = ready;
+// only proof it can run. Tri-state because an unreadable catalog is not the same
+// as an empty one — readiness that was never observed must not downgrade anything.
+export type LocalTierReadiness = 'ready' | 'empty' | 'unknown';
+let localTierReadiness: LocalTierReadiness = 'unknown';
+export function applyLocalTranscriptionReady(readiness: LocalTierReadiness): void {
+  localTierReadiness = readiness;
+}
+
+/** Whether a cloud transcription key exists — a path that survives an empty local
+ * catalog. Derived from CAP_PROVIDERS (a keyless row has only empty AND-groups) so
+ * the cloud list cannot drift from the one used for provider routing. */
+function cloudTranscriptionConfigured(): boolean {
+  return (CAP_PROVIDERS.transcription ?? []).some((row) => row.need.some((group) => group.length > 0
+    && group.every((name) => Boolean(liveKeys?.[name]?.configured))));
 }
 
 export function currentCaps(): Record<CapabilityKey, boolean> {
   const caps = liveCaps ?? CONFIGURED_CAPS;
-  return localTranscriptionReady && !caps.transcription ? { ...caps, transcription: true } : caps;
+  // A downloaded tier is a real second path: it may upgrade, never downgrade.
+  if (localTierReadiness === 'ready' && !caps.transcription) return { ...caps, transcription: true };
+  // The server only knows that `local` is the preferred provider (keystore
+  // computeCaps), not whether a tier is on disk, so it claims transcription while a
+  // request would fail late on the missing model. Correct that claim only when the
+  // client positively saw an empty catalog AND no cloud key could serve the request.
+  if (localTierReadiness === 'empty' && caps.transcription
+    && liveModels?.PREFERRED_TRANSCRIPTION_PROVIDER === 'local' && !cloudTranscriptionConfigured()) {
+    return { ...caps, transcription: false };
+  }
+  return caps;
 }
 
 // Per-KEY live status (GET /api/keys → keys, booleans only) — refines the manifest to
@@ -208,8 +226,25 @@ function providerSuffix(cap: CapabilityKey, mode: ApprovalMode): string {
   return ` · available: ${names} — no user default: before the first use of this capability in the session, use ask_followup_questions to select one provider, then keep using that choice`;
 }
 
+/** Firecrawl-only extraction: map/crawl/batch, screenshots, actions, execJs, a
+ * structured schema and non-markdown formats all need FIRECRAWL_API_KEY. The
+ * keyless Parallel/Keenable providers serve only web_search + markdown page reads,
+ * so a keyless install must not be told the advanced tools exist. */
+function webHasAdvancedExtraction(): boolean {
+  return Boolean(liveKeys?.FIRECRAWL_API_KEY?.configured);
+}
+
+interface CapRow { key: CapabilityKey; label: string; tool: string; fallback: string }
+
+/** The web row reflects the capability LEVEL the active provider really has. */
+function webRow(): CapRow {
+  return webHasAdvancedExtraction()
+    ? { key: 'web', label: 'Advanced web extraction', tool: 'web_map/web_crawl/web_batch_scrape and Firecrawl page formats', fallback: 'use basic web_search/web_browser excerpts, or ask the user to paste the page content' }
+    : { key: 'web', label: 'Web search + page reading', tool: 'web_search/web_browser, markdown pages only (no web_map/web_crawl/web_batch_scrape, screenshots, actions, execJs, schema, or non-markdown formats)', fallback: 'use basic web_search/web_browser excerpts, or ask the user to paste the page content' };
+}
+
 // label + the primary tool + a fallback hint when the capability is off.
-const CAP_ROWS: { key: CapabilityKey; label: string; tool: string; fallback: string }[] = [
+const CAP_ROWS: CapRow[] = [
   { key: 'image', label: 'Image generation', tool: 'submit_image', fallback: 'use push_asset/import_url_asset for a public image, or ask the user to upload/paste one' },
   { key: 'voice', label: 'Voice/TTS', tool: 'submit_voice', fallback: 'ask the user to provide and upload/paste audio' },
   { key: 'video', label: 'Video generation', tool: 'submit_video', fallback: 'use push_asset for a public video, or ask the user to upload one' },
@@ -218,8 +253,16 @@ const CAP_ROWS: { key: CapabilityKey; label: string; tool: string; fallback: str
   { key: 'stock', label: 'Stock-media search', tool: 'search_stock_media', fallback: 'use push_asset to import a known public URL directly' },
   { key: 'transcription', label: 'Transcription/talking-head editing', tool: 'transcribe_track', fallback: 'word-level deletion, filler cleanup, and automatic captions stay unavailable until the free local Whisper model is downloaded in Settings → Local models → Local transcription (no key needed), or a cloud transcription provider is configured' },
   { key: 'sandbox', label: 'Sandbox execution (ffmpeg/node/python)', tool: 'run_code', fallback: 'skip run_code steps; probe_media does not need the sandbox and stays available' },
-  { key: 'web', label: 'Advanced web extraction', tool: 'web_map/web_crawl/web_batch_scrape and Firecrawl page formats', fallback: 'use basic web_search/web_browser excerpts, or ask the user to paste the page content' },
 ];
+
+/** Appended after a keyless provider sentence: names the Firecrawl-only tools the
+ * keyless provider refuses, so the agent does not call them (they would fail with
+ * "These options require provider=\"firecrawl\""). */
+function webExtractionLimitSuffix(): string {
+  return webHasAdvancedExtraction()
+    ? ' Advanced page formats still require Firecrawl.'
+    : ' web_map, web_crawl, web_batch_scrape, screenshots, actions, execJs, schema and non-markdown formats need FIRECRAWL_API_KEY and are unavailable — do not call them.';
+}
 
 /** System-prompt section listing which key-gated tools are on/off (local editing —
  * templates/effects/transitions/zoom/etc. — never needs a key and is always on).
@@ -231,7 +274,7 @@ export function capabilitiesPrompt(
 ): string {
   const on: string[] = [];
   const off: string[] = [];
-  for (const r of CAP_ROWS) {
+  for (const r of [...CAP_ROWS, webRow()]) {
     if (caps[r.key]) on.push(`${r.label}(${r.tool}${providerSuffix(r.key, mode)})`);
     else off.push(`${r.label} (${r.tool}) — ${r.fallback}`);
   }
@@ -247,9 +290,9 @@ export function capabilitiesPrompt(
       : liveModels?.WEB_SEARCH_PROVIDER === 'firecrawl'
         ? '\nBasic web_search and web_browser explicitly use Firecrawl and require FIRECRAWL_API_KEY. Do not switch providers after an error.'
         : liveModels?.WEB_SEARCH_PROVIDER === 'parallel'
-          ? '\nBasic web_search and web_browser page excerpts explicitly use anonymous Parallel Search MCP without a search key. Advanced page formats still require Firecrawl.'
+          ? `\nBasic web_search and web_browser page excerpts explicitly use anonymous Parallel Search MCP without a search key.${webExtractionLimitSuffix()}`
           : liveModels?.WEB_SEARCH_PROVIDER === 'keenable'
-            ? '\nBasic web_search and web_browser page reads explicitly use Keenable without a search key. Advanced page formats still require Firecrawl.'
+            ? `\nBasic web_search and web_browser page reads explicitly use Keenable without a search key.${webExtractionLimitSuffix()}`
             : '\nBasic web_search and web_browser use Firecrawl and require FIRECRAWL_API_KEY. The anonymous Parallel Search MCP and keyless Keenable are used only when the user sets WEB_SEARCH_PROVIDER=parallel or keenable; do not pass provider="parallel" or "keenable" otherwise.')
     + '\nProvider choice: skill files only document per-provider usage details; the actual provider is decided by THIS list'
     + ' and its routing suffix (user default → single provider → ask once in manual mode → pick freely in auto mode).'
