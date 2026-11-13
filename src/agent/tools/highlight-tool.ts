@@ -286,7 +286,28 @@ function trimCopyToHighlight(
   const outside: number[] = [];
   for (let i = 0; i < wordCount; i++) if (i < hl.startWordIndex || i > hl.endWordIndex) outside.push(i);
   if (outside.length) ctx.commands.deleteWords(transcribedId, outside);
-  ctx.commands.moveItem(transcribedId, { startFrame: 0 });
+  const transcribed = ctx.getState().items.find((it) => it.id === transcribedId);
+  if (transcribed && transcribed.kind === 'video' && hasOperationalTranscript(transcribed)) {
+    // A video clip renders its SOURCE continuously — its word stream is transcript
+    // bookkeeping, not its render (editor word ops stop re-timing such clips), so cut
+    // the highlight window explicitly here: srcInFrame = first kept word's source
+    // frame, duration = the highlight span. Word-driven audio keeps the deleteWords
+    // shrink (edited stream) and only needs the pan to 0 below.
+    const localStart = Math.max(0, spanStart - transcribed.startFrame);
+    const spanLen = Math.max(1, spanEnd - spanStart);
+    const srcStart = sourceWindowForTimelineRange(
+      { ...transcribed, playbackRate: 1 },
+      localStart,
+      spanLen,
+    ).startFrame;
+    ctx.commands.setItemTiming(transcribedId, {
+      startFrame: 0,
+      durationInFrames: spanLen,
+      srcInFrame: srcStart,
+    });
+  } else {
+    ctx.commands.moveItem(transcribedId, { startFrame: 0 });
+  }
 
   // 2) The rest of the clips: intersect with [spanStart,spanEnd) - delete without overlap, crop and translate with -spanStart.
   for (const it of snapshot) {
