@@ -6,7 +6,7 @@ import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/
 import { fetchWithProxy, isHttpUrl, truncate } from './firecrawl-shared.ts';
 
 const ENDPOINT = 'https://search.parallel.ai/mcp';
-const USER_AGENT = 'OpenChatCut (+https://github.com/0xsline/OpenChatCut)';
+const USER_AGENT = 'Arrowlogy (+https://github.com/0xsline/OpenChatCut)';
 
 type Body = Record<string, unknown>;
 

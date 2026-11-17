@@ -17,11 +17,11 @@ export const keenableProbe = {
       signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
       dispatcher: proxyDispatcher(),
       headers: {
-        'X-Keenable-Title': 'OpenChatCut',
+        'X-Keenable-Title': 'Arrowlogy',
         'Content-Type': 'application/json',
         ...(key ? { 'X-API-Key': key } : {}),
       },
-      body: JSON.stringify({ query: 'OpenChatCut connection test', max_results: 1 }),
+      body: JSON.stringify({ query: 'Arrowlogy connection test', max_results: 1 }),
     } as RequestInit);
   },
   okText: () => '连接成功 · 搜索可用',

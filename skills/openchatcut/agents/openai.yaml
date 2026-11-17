@@ -1,16 +1,16 @@
 interface:
-  display_name: "OpenChatCut"
-  short_description: "Connect and edit local OpenChatCut video projects"
+  display_name: "Arrowlogy"
+  short_description: "Connect and edit local Arrowlogy video projects"
   brand_color: "#7C3AED"
   icon_small: "./assets/openchatcut-icon.png"
   icon_large: "./assets/openchatcut-icon.png"
-  default_prompt: "Use $openchatcut to connect to OpenChatCut and inspect the selected video project."
+  default_prompt: "Use $openchatcut to connect to Arrowlogy and inspect the selected video project."
 
 dependencies:
   tools:
     - type: "mcp"
       value: "openchatcut"
-      description: "OpenChatCut local editor MCP server"
+      description: "Arrowlogy local editor MCP server"
       transport: "streamable_http"
       url: "http://localhost:5199/api/external-mcp/mcp"
 

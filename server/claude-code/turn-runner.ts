@@ -9,10 +9,10 @@ import { claudeCodeCommand } from './command.ts';
 
 /**
  * Unlike Codex's app-server (a long-lived JSON-RPC process with a
- * dynamicTools bridge OpenChatCut must execute against), Claude Code CLI's
- * own MCP client calls OpenChatCut's MCP server directly and executes tools
+ * dynamicTools bridge Arrowlogy must execute against), Claude Code CLI's
+ * own MCP client calls Arrowlogy's MCP server directly and executes tools
  * itself. Each turn is a fresh `claude -p ... --output-format stream-json`
- * subprocess; OpenChatCut only needs to spawn it, feed it an MCP config
+ * subprocess; Arrowlogy only needs to spawn it, feed it an MCP config
  * pointing back at its own external-mcp endpoint, and translate the NDJSON
  * output for display. No tool-result settlement RPC exists or is needed.
  */
@@ -95,7 +95,7 @@ const DENIED_TOOLS = [
   'Glob', 'Grep', 'WebFetch', 'WebSearch', 'Task', 'Agent',
 ].join(' ');
 const RUNTIME_RULES = [
-  'You are the built-in Agent inside the OpenChatCut video editor, driving the currently open project',
+  'You are the built-in Agent inside the Arrowlogy video editor, driving the currently open project',
   `through the "${MCP_SERVER_NAME}" MCP server. Prefer the ${ALLOWED_TOOLS} tools over any general-purpose`,
   'reasoning about files — those tools are the only supported way to read or change the project.',
   'Call begin_edit_session before editing, keep its editSessionId for every editor tool call, and',
@@ -324,7 +324,7 @@ function killTurnTree(child: ChildProcess): void {
 /**
  * Runs one `claude -p` turn as a fresh subprocess, streaming translated
  * display events. Tool execution happens inside the CLI itself via the MCP
- * server it's given — OpenChatCut never intercepts or settles tool calls.
+ * server it's given — Arrowlogy never intercepts or settles tool calls.
  */
 export async function runClaudeCodeTurn(
   claudePath: string,
@@ -337,7 +337,7 @@ export async function runClaudeCodeTurn(
   if (signal.aborted) return;
   await withTempMcpConfig(mcpUrl, mcpToken, request.approvalMode, async (mcpConfigPath) => {
     const systemPrompt = request.system ? `${RUNTIME_RULES}\n\n${request.system}` : RUNTIME_RULES;
-    // The system prompt goes in a file, never on the command line. OpenChatCut's
+    // The system prompt goes in a file, never on the command line. Arrowlogy's
     // agent system prompt runs to tens of KB, and Windows caps a command line at
     // ~32 KB total: passing it inline as --append-system-prompt overflows that
     // and spawn fails with ENAMETOOLONG. --append-system-prompt-file is verified

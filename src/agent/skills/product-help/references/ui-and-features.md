@@ -1,4 +1,4 @@
-# OpenChatCut UI & Features
+# Arrowlogy UI & Features
 
 ## Project Entry & Dashboard
 

@@ -10,6 +10,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Added / 新增
 
+- **2026-11-17 — rebranded to Arrowlogy.** This fork is rebranded as **Arrowlogy** (was OpenChatCut). Historical entries below keep the original project name for honest attribution. Arrowlogy is built on OpenChatCut (AGPL-3.0) — https://github.com/0xsline/OpenChatCut — and is not affiliated with the original authors.
+- **2026-11-17 — 品牌更名为 Arrowlogy。** 本分支已更名为 **Arrowlogy**（原 OpenChatCut）。以下历史记录保留原名以示客观归属。Arrowlogy 基于 OpenChatCut（AGPL-3.0）构建 — https://github.com/0xsline/OpenChatCut — 与原作者无隶属关系。
+
 - Doubao TTS supports specifying the Volcengine `speaker` (音色 ID): Settings → 配音 / TTS → 豆包 TTS adds a default 音色 ID, and any user-supplied speaker ID (for example `S_5wulnA7i2`) passes through verbatim as `references[].speaker`; the connection test now verifies that saved ID.
   Doubao 配音支持指定火山 `speaker`（音色 ID）：设置 → 配音 / TTS → 豆包 TTS 新增默认音色 ID；用户提供的音色 ID（如 `S_5wulnA7i2`）会原样作为 `references[].speaker` 发送，连接测试也会校验该 ID。
 

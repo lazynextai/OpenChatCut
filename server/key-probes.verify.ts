@@ -231,14 +231,14 @@ assert.match(networkMessage(Object.assign(new Error('The operation was aborted d
   globalThis.fetch = async (input, init) => {
     const headers = new Headers(init?.headers);
     calls.push({ url: String(input), title: headers.get('X-Keenable-Title'), key: headers.get('X-API-Key') });
-    return Response.json({ query: 'OpenChatCut connection test', results: [] });
+    return Response.json({ query: 'Arrowlogy connection test', results: [] });
   };
   try {
     const keyless = await runProbe('web/keenable', {});
     assert.equal(keyless.ok, true, 'keyless Keenable passes the connection test');
     assert.deepEqual(calls, [{
       url: 'https://api.keenable.ai/v1/search/public',
-      title: 'OpenChatCut',
+      title: 'Arrowlogy',
       key: null,
     }]);
     calls.length = 0;
@@ -246,7 +246,7 @@ assert.match(networkMessage(Object.assign(new Error('The operation was aborted d
     assert.equal(keyed.ok, true);
     assert.deepEqual(calls, [{
       url: 'https://api.keenable.ai/v1/search',
-      title: 'OpenChatCut',
+      title: 'Arrowlogy',
       key: 'keen-test',
     }]);
   } finally {

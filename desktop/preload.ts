@@ -83,7 +83,7 @@ export interface DesktopInferenceApi {
 }
 
 
-export interface OpenChatCutDesktopApi {
+export interface ArrowlogyDesktopApi {
   getPathForFile(file: File): string | undefined;
   platform: NodeJS.Platform;
   selectDirectory(defaultPath?: string): Promise<string | null>;
@@ -133,7 +133,7 @@ async function invokeDesktopUpdate(
   return state;
 }
 
-const api: OpenChatCutDesktopApi = {
+const api: ArrowlogyDesktopApi = {
   getPathForFile: (file) => webUtils.getPathForFile(file) || undefined,
   platform: process.platform,
   selectDirectory: (defaultPath) =>

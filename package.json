@@ -1,16 +1,16 @@
 {
-  "name": "openchatcut",
+  "name": "arrowlogy",
   "private": true,
   "version": "0.2.17",
-  "description": "Open-source ChatCut alternative: local-first, agent-native AI video editor with MCP.",
+  "description": "Local-first, agent-native AI video editor with MCP.",
   "license": "AGPL-3.0-or-later",
-  "author": "OpenChatCut Contributors",
+  "author": "Arrowlogy",
   "type": "module",
   "main": "desktop-dist/main.mjs",
   "bin": {
     "occ": "./cli-dist/occ.mjs"
   },
-  "desktopName": "openchatcut.desktop",
+  "desktopName": "arrowlogy.desktop",
   "engines": {
     "node": ">=24.22.1 <25"
   },

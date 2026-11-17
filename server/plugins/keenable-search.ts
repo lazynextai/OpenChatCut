@@ -4,8 +4,8 @@
 import { fetchWithProxy, isHttpUrl, truncate } from './firecrawl-shared.ts';
 
 const BASE = 'https://api.keenable.ai';
-const APP_TITLE = 'OpenChatCut';
-const USER_AGENT = 'OpenChatCut (+https://github.com/0xsline/OpenChatCut)';
+const APP_TITLE = 'Arrowlogy';
+const USER_AGENT = 'Arrowlogy (+https://github.com/0xsline/OpenChatCut)';
 
 type Body = Record<string, unknown>;
 
