@@ -77,8 +77,8 @@ export default {
   compression: 'maximum',
   publish: [{
     provider: 'github',
-    owner: '0xsline',
-    repo: 'OpenChatCut',
+    owner: 'lazynextai',
+    repo: 'arrowlogy',
     channel: updateChannel,
   }],
   files: [
