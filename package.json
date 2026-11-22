@@ -1,7 +1,7 @@
 {
   "name": "arrowlogy",
   "private": true,
-  "version": "0.2.19",
+  "version": "0.2.20",
   "description": "Local-first, agent-native AI video editor with MCP.",
   "license": "AGPL-3.0-or-later",
   "author": "Arrowlogy",

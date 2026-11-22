@@ -35,7 +35,7 @@ export async function parallelWebRequest(
   if (typeof body.sessionId === 'string' && /^[a-f0-9-]{36}$/.test(body.sessionId)) {
     args.session_id = body.sessionId;
   }
-  const client = new Client({ name: 'openchatcut', version: '0.2.19' });
+  const client = new Client({ name: 'openchatcut', version: '0.2.20' });
   const transport = new StreamableHTTPClientTransport(new URL(ENDPOINT), {
     fetch: (input, init) => {
       const headers = new Headers(init?.headers);
