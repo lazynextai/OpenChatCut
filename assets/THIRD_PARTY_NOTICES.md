@@ -151,7 +151,7 @@ beyond retaining the license notices shipped in the packages.
 | `@modelcontextprotocol/sdk` | 1.32.1 | **MIT** |
 | `@e2b/code-interpreter` | 2.9.0 | **MIT** |
 | `@github/copilot-sdk` | 1.0.11 | **MIT** (distinct from the proprietary Copilot CLI binaries in §3) |
-| `capcut-cli` | **not an npm dependency** | **unverified** — referenced by external-agent integration but absent from `package-lock.json`; if a CapCut CLI binary is ever bundled, verify its license first |
+| `capcut-cli` | **not bundled** — runtime-only: `server/external-agent/capcut-command.ts` spawns pinned `npx --yes capcut-cli@0.26.0`; absent from `package.json` / `package-lock.json` / `node_modules` | **MIT (verified 2026-11-22)** — npm license field + GitHub (renezander030/capcut-cli); unofficial, not affiliated with ByteDance; runtime use fine since it is never redistributed |
 
 Obligations: MIT / Apache-2.0 / BSD-2-Clause components require retention of
 their copyright and license notices. The full texts ship inside each package in
@@ -172,7 +172,7 @@ The app bundles two sets of fonts:
    | Font | License | Status |
    |---|---|---|
    | Geist (Vercel, `public/fonts/Geist-*.woff2`) | **OFL-1.1** | OK — SIL Open Font License 1.1 |
-   | IoskeleyMono (`public/fonts/IoskeleyMono-*.woff2`, used as the "Geist Mono" glyph source) | claimed OFL-1.1 in `src/index.css` (Berkeley Mono look-alike built from Iosevka, <https://github.com/ahatem/IoskeleyMono>) | **⚠️ unverified** — no license text ships next to the font files; verify the upstream repo/modeled font terms before commercial release |
+   | IoskeleyMono (`public/fonts/IoskeleyMono-*.woff2`, used as the "Geist Mono" glyph source) | **OFL-1.1** (verified 2026-11-22 — upstream [LICENSE](https://github.com/ahatem/IoskeleyMono/blob/main/LICENSE): © 2015-2026 Belleve Invis (Iosevka) + © 2025 Ahmed Hatem, no Reserved Font Name; independent open font built on Iosevka, not a Berkeley Mono clone) | ✅ OK — OFL expressly permits bundling in commercial software with the OFL text + copyright notice shipped (`OFL-1.1.txt` + `assets/fonts/LICENSES.md`) |
 
 2. **Google-fonts runtime fonts** via `@remotion/google-fonts` — covered by the
    Remotion and Google Fonts terms; OFL/Apache per individual font card.
@@ -188,7 +188,7 @@ The app bundles two sets of fonts:
 | Silero VAD (`public/models/silero-vad/`) | snakers4/silero-vad | **MIT** — license notice added at `public/models/silero-vad/LICENSE.md` on 2026-11-22 |
 | beat-this (`musetric/beat-this-onnx`, rhythm-lite) | HF model pack (declared in `shared/model-packs/catalog.ts`) | **MIT** (declared) |
 | Chinese-CLIP (`Xenova/chinese-clip-vit-base-patch16`) | HF model pack | **Apache-2.0** (declared) |
-| CLAP / clap-htsat-unfused (`Xenova/clap-htsat-unfused`) | HF model pack | **⚠️ unverified** — `catalog.ts` declares Apache-2.0, but the HF model card was not verified; **verify the model card before commercial release** |
+| CLAP / clap-htsat-unfused (`Xenova/clap-htsat-unfused`) | HF model pack | **Apache-2.0 (verified 2026-11-22)** — source model `laion/clap-htsat-unfused` is license-tagged `apache-2.0` on HF (API `cardData.license`); the Xenova ONNX conversion carries no tag of its own (mechanical derivative) — treat as Apache-2.0; the paper is CC-BY-4.0 (cite [arXiv:2211.06687](https://arxiv.org/abs/2211.06687)) |
 
 Notes: these model packs are downloaded at runtime from Hugging Face by
 `server/plugins/hf-proxy.ts` (not bundled into the installer). The declared
@@ -200,8 +200,8 @@ licenses live in `shared/model-packs/catalog.ts`.
 
 | File | Source | Status |
 |---|---|---|
-| `assets/luts/Sony_Slog3_s709.cube` (Sony S-Log3 → s709, 33³) | Sony vendor LUT | **⚠️ redistribution rights unverified** |
-| `assets/luts/CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube` (Canon Log 3 → BT.709, 33³) | Canon vendor LUT | **⚠️ redistribution rights unverified** |
+| `assets/luts/Sony_Slog3_s709.cube` (Sony S-Log3 → s709, 33³) | Sony vendor LUT | **❌ not cleared** (2026-11-22) — free to download (Sony Look Profile / `pro.sony` LUT library) but no published grant to embed or redistribute in a commercial app; keep excluded from distribution |
+| `assets/luts/CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube` (Canon Log 3 → BT.709, 33³) | Canon vendor LUT | **❌ not permissible** (2026-11-22) — Canon's download disclaimer allows only personal, non-commercial use and forbids distribution, modification and derivative works ([asia.canon/en/support/0200747702](https://asia.canon/en/support/0200747702)); keep excluded from distribution |
 
 As of **2026-11-22** these vendor LUTs are **excluded from distribution**:
 
@@ -214,9 +214,13 @@ As of **2026-11-22** these vendor LUTs are **excluded from distribution**:
   "Canon Log 3 → BT.709", defined in `src/gl/fx/lutEffects.ts`) will not render
   in packaged builds until rights are confirmed. This is tracked in
   `HANDOFF.md` §12.11 as a follow-up.
-- Next step (needs vendor confirmation, not required for the free path): either
-  confirm redistribution rights (Sony/Canon published LUTs) or re-implement the
-  transforms as original .cube files.
+- Verified 2026-11-22: Canon's disclaimer prohibits redistribution and
+  derivative works outright; Sony publishes its LUTs for download but grants no
+  redistribution right in a commercial product. **Re-implementation is now the
+  path** (planned, not yet implemented): express the S-Log3 → Rec.709 and
+  Canon Log 3 → BT.709 transforms in code (published curve + gamut matrices)
+  or ship clearly-licensed community LUTs (CC0/CC-BY) instead of vendor .cube
+  files.
 
 ---
 

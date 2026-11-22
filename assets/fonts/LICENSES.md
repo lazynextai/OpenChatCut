@@ -16,11 +16,13 @@ SIL Open Font License 1.1 text is in `OFL-1.1.txt`.
 | File (in `public/fonts/`) | Font | License / status |
 |---|---|---|
 | `Geist-Regular.woff2`, `Geist-Medium.woff2`, `Geist-SemiBold.woff2`, `Geist-Bold.woff2` | Geist (Vercel) — the UI brand sans | **OFL-1.1** (SIL Open Font License 1.1, see `OFL-1.1.txt`) |
-| `IoskeleyMono-Regular.woff2`, `IoskeleyMono-Medium.woff2`, `IoskeleyMono-SemiBold.woff2`, `IoskeleyMono-Bold.woff2` | IoskeleyMono — provides the "Geist Mono" glyphs (Berkeley Mono look-alike configured from Iosevka, <https://github.com/ahatem/IoskeleyMono>) | **⚠️ unverified** — `src/index.css` claims OFL-1.1, but no license text ships next to the files; verify the upstream project's license terms before commercial release |
+| `IoskeleyMono-Regular.woff2`, `IoskeleyMono-Medium.woff2`, `IoskeleyMono-SemiBold.woff2`, `IoskeleyMono-Bold.woff2` | IoskeleyMono — provides the "Geist Mono" glyphs (a Berkeley Mono–inspired open font configured from Iosevka; an independent design, not a clone; <https://github.com/ahatem/IoskeleyMono>) | **✅ OFL-1.1 verified 2026-11-22** — upstream [LICENSE](https://github.com/ahatem/IoskeleyMono/blob/main/LICENSE): Copyright (c) 2015-2026 Belleve Invis (Iosevka) + Copyright (c) 2025 Ahmed Hatem; SIL Open Font License 1.1; no Reserved Font Name |
 
 The Geist woff2 files are the product UI sans (OFL-1.1); the OFL-1.1 text in
-`OFL-1.1.txt` applies. IoskeleyMono is flagged unverified until its license
-terms are confirmed.
+`OFL-1.1.txt` applies. IoskeleyMono is verified OFL-1.1 (2026-11-22): OFL
+expressly permits bundling the fonts with software — including commercial
+software — provided each copy carries the copyright notice and this license,
+which `OFL-1.1.txt` + this table satisfy.
 
 The bundled WOFF2 files remain licensed under the SIL Open Font License 1.1.
 
