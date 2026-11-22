@@ -118,6 +118,8 @@ export default {
     // rights; removed from distribution pending confirmation (see THIRD_PARTY_NOTICES.md §8, HANDOFF §12.11).
     { from: 'dist', to: 'dist', filter: ['**/*', '!media/uploads/**', '!luts/**'] },
     { from: 'desktop-dist/remotion-bundle', to: 'remotion-bundle', filter: ['**/*', '!luts/**', '!public/luts/**'] },
+    // Ship the AGPL §5(a) modified-source NOTICE as a packaged resource (root file is not in the asar files list).
+    { from: 'NOTICE.md', to: 'NOTICE.md' },
     { from: 'desktop-dist/chrome-headless-shell', to: 'chrome-headless-shell' },
   ],
   npmRebuild: false,
