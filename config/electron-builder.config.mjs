@@ -114,8 +114,10 @@ export default {
     // Exclude media/uploads because Vite copies all of public/ into dist, which would embed gigabytes of user assets.
     // uploadsMiddleware serves /media/uploads directly from the asset directory (userData in packaged builds),
     // so resources/dist never needs those files.
-    { from: 'dist', to: 'dist', filter: ['**/*', '!media/uploads/**'] },
-    { from: 'desktop-dist/remotion-bundle', to: 'remotion-bundle' },
+    // Exclude luts/ — vendor camera-log LUTs (Sony S-Log3, Canon Log 3) have unverified redistribution
+    // rights; removed from distribution pending confirmation (see THIRD_PARTY_NOTICES.md §8, HANDOFF §12.11).
+    { from: 'dist', to: 'dist', filter: ['**/*', '!media/uploads/**', '!luts/**'] },
+    { from: 'desktop-dist/remotion-bundle', to: 'remotion-bundle', filter: ['**/*', '!luts/**', '!public/luts/**'] },
     { from: 'desktop-dist/chrome-headless-shell', to: 'chrome-headless-shell' },
   ],
   npmRebuild: false,

@@ -477,6 +477,15 @@ function FooterBar({ reveal, onReveal, message, dirty, saving, onClose, onSave }
       <a href="/fonts/LICENSES.md" target="_blank" rel="noopener noreferrer" style={licenseLink}>
         {t('第三方字体许可')}
       </a>
+      <a href="/THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener noreferrer" style={licenseLink}>
+        {t('第三方声明')}
+      </a>
+      <span style={{ color: theme.textDim, fontSize: 11.5, whiteSpace: 'nowrap' }}>
+        {t('许可：AGPL-3.0-or-later · 源码：')}
+        <a href="https://github.com/lazynextai/OpenChatCut" target="_blank" rel="noopener noreferrer" style={licenseLink}>
+          github.com/lazynextai/OpenChatCut
+        </a>
+      </span>
       <div style={{ ...footMsg, color: message?.color ?? ON }}>{message?.text ?? ''}</div>
       <button type="button" onClick={onClose} style={btnGhost}>{t('关闭')}</button>
       <button type="button" onClick={onSave} disabled={disabled}
