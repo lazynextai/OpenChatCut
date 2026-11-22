@@ -10,7 +10,7 @@
 | `sound-effects/` | `/sound-effects/` | 音效库 |
 | `audio/` | `/audio/` | 内置音频轨样例 |
 | `media/` | `/media/` | 产品样例媒体（如 speech-sample；**不含** uploads） |
-| `luts/` | `/luts/` | .cube LUT |
+| `luts/` | `/luts/` | 原创 .cube LUT（`arrowlogy-slog3-rec709-33.cube`、`arrowlogy-canonlog3-bt709-33.cube`，由 `scripts/gen-log-luts.mjs` 按公开标准公式生成；见 `luts/README.md`。目录内索尼/佳能厂商 LUT 不随发行版分发） |
 | `library-previews/` | `/library-previews/` | 资源库预览图 |
 | `plugins/` | `/plugins/` | 内置插件索引/示例 |
 | `templates/` | `/templates/` | MG / 口播模板 JSON（源码编译期 import） |

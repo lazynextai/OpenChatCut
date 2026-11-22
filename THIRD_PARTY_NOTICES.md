@@ -196,33 +196,23 @@ licenses live in `shared/model-packs/catalog.ts`.
 
 ---
 
-## 8. Vendor LUTs — removed from commercial distribution pending rights
+## 8. Camera-log LUTs — vendor files excluded; original derived transforms shipped
 
 | File | Source | Status |
 |---|---|---|
-| `assets/luts/Sony_Slog3_s709.cube` (Sony S-Log3 → s709, 33³) | Sony vendor LUT | **❌ not cleared** (2026-11-22) — free to download (Sony Look Profile / `pro.sony` LUT library) but no published grant to embed or redistribute in a commercial app; keep excluded from distribution |
-| `assets/luts/CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube` (Canon Log 3 → BT.709, 33³) | Canon vendor LUT | **❌ not permissible** (2026-11-22) — Canon's download disclaimer allows only personal, non-commercial use and forbids distribution, modification and derivative works ([asia.canon/en/support/0200747702](https://asia.canon/en/support/0200747702)); keep excluded from distribution |
+| `assets/luts/Sony_Slog3_s709.cube` (Sony S-Log3 → s709, 33³) | Sony vendor LUT | **❌ not cleared** (2026-11-22) — free to download (Sony Look Profile / `pro.sony` LUT library) but no published grant to embed or redistribute in a commercial app; kept excluded from distribution. **Replaced** (2026-11-23) by original transform `arrowlogy-slog3-rec709-33.cube` |
+| `assets/luts/CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube` (Canon Log 3 → BT.709, 33³) | Canon vendor LUT | **❌ not permissible** (2026-11-22) — Canon's download disclaimer allows only personal, non-commercial use and forbids distribution, modification and derivative works ([asia.canon/en/support/0200747702](https://asia.canon/en/support/0200747702)); kept excluded from distribution. **Replaced** (2026-11-23) by original transform `arrowlogy-canonlog3-bt709-33.cube` |
+| `assets/luts/arrowlogy-slog3-rec709-33.cube` (S-Log3 / S-Gamut3.Cine → Rec.709, 33³) | **Original Arrowlogy transform** — generated from published standards by `scripts/gen-log-luts.mjs` | **✅ OK** (2026-11-23) — independent implementation: Sony's published S-Log3 curve (full-range 10-bit code form) + published gamut primaries (normalised primary matrix, D65) + BT.709-6 OETF. Constants mirrored from Colour-Science (BSD-3-Clause, open reference). No Sony/Canon IP or vendor .cube data redistributed |
+| `assets/luts/arrowlogy-canonlog3-bt709-33.cube` (Canon Log 3 / Cinema Gamut → BT.709, 33³) | **Original Arrowlogy transform** — generated from published standards by `scripts/gen-log-luts.mjs` | **✅ OK** (2026-11-23) — independent implementation: Canon's published Canon Log 3 v1.2 curve (legal-swing constants, reflection ×0.9) + Canon Cinema Gamut primaries + BT.709-6 OETF. Constants mirrored from Colour-Science (BSD-3-Clause). No Canon IP or vendor .cube data redistributed |
 
-As of **2026-11-22** these vendor LUTs are **excluded from distribution**:
+As of **2026-11-23** the vendor LUTs remain **excluded from distribution**; the two **original Arrowlogy transforms ship in the installer**:
 
-- They are filtered out of the packaged desktop build
-  (`config/electron-builder.config.mjs` — `extraResources` excludes `luts/**`
-  from `dist` and from the Remotion bundle).
-- The source files remain in the repository under `assets/luts/` for
-  development use; they are **not** deleted from git history.
-- Consequence: the two built-in camera-log LUT effects ("Sony S-Log3 → s709",
-  "Canon Log 3 → BT.709", defined in `src/gl/fx/lutEffects.ts`) will not render
-  in packaged builds until rights are confirmed. This is tracked in
-  `HANDOFF.md` §12.11 as a follow-up.
-- Verified 2026-11-22: Canon's disclaimer prohibits redistribution and
-  derivative works outright; Sony publishes its LUTs for download but grants no
-  redistribution right in a commercial product. **Re-implementation is now the
-  path** (planned, not yet implemented): express the S-Log3 → Rec.709 and
-  Canon Log 3 → BT.709 transforms in code (published curve + gamut matrices)
-  or ship clearly-licensed community LUTs (CC0/CC-BY) instead of vendor .cube
-  files.
+- `config/electron-builder.config.mjs` `extraResources` excludes only the two vendor `.cube` files by name (`!luts/Sony_Slog3_s709.cube`, `!luts/CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube`) — the `arrowlogy-*.cube` files are included (first re-included package: next release, v0.2.20).
+- The vendor source files remain in the repository under `assets/luts/` for development reference; they are **not** deleted from git history and are **never** packaged.
+- The built-in camera-log LUT effects ("S-Log3 → Rec.709 (SDR)", "Canon Log 3 → BT.709", defined in `src/gl/fx/lutEffects.ts`) now load the original Arrowlogy transforms, so they render correctly in packaged builds.
+- Verified 2026-11-22: Canon's disclaimer prohibits redistribution and derivative works outright; Sony publishes its LUTs for download but grants no redistribution right in a commercial product. **Resolution (2026-11-23): re-implemented** — the S-Log3 → Rec.709 and Canon Log 3 → BT.709 transforms are now expressed from published curve + gamut math (`scripts/gen-log-luts.mjs`; formulas + constant sources in `assets/luts/README.md`); no vendor deliverable is distributed.
 
 ---
 
-*Generated 2026-11-22. Keep in sync with `assets/THIRD_PARTY_NOTICES.md` (the
+*Generated 2026-11-23. Keep in sync with `assets/THIRD_PARTY_NOTICES.md` (the
 copy served inside the app at `/THIRD_PARTY_NOTICES.md`).*

@@ -25,18 +25,18 @@ import type { FxDef } from './uniforms';
 export const LUT_EFFECTS: Record<string, FxDef> = {
   'builtin:slog3-s709': {
     id: 'builtin:slog3-s709',
-    name: 'Sony S-Log3 → s709',
-    desc: 'Sony S-Log3 / S-Gamut3.Cine → Rec.709。.cube 三维查找表（Sony_Slog3_s709.cube, 33³）+ 通用 lut.frag（sampler3D，BT.709 编解码包夹）',
+    name: 'S-Log3 → Rec.709 (SDR)',
+    desc: 'Sony S-Log3 / S-Gamut3.Cine → Rec.709。.cube 三维查找表（arrowlogy-slog3-rec709-33.cube, 33³）+ 通用 lut.frag（sampler3D，BT.709 编解码包夹）',
     frag: lutFrag,
-    cube: '/luts/Sony_Slog3_s709.cube',
+    cube: '/luts/arrowlogy-slog3-rec709-33.cube',
     props: [{ key: 'intensity', label: '强度', default: 1, min: 0, max: 1, step: 0.01 }],
   },
   'builtin:canon-log3-709': {
     id: 'builtin:canon-log3-709',
     name: 'Canon Log 3 → BT.709',
-    desc: 'Canon Cinema Gamut / Canon Log 3 → Canon 709。.cube 三维查找表（CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube, 33³）+ 通用 lut.frag',
+    desc: 'Canon Cinema Gamut / Canon Log 3 → Canon 709。.cube 三维查找表（arrowlogy-canonlog3-bt709-33.cube, 33³）+ 通用 lut.frag',
     frag: lutFrag,
-    cube: '/luts/CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube',
+    cube: '/luts/arrowlogy-canonlog3-bt709-33.cube',
     props: [{ key: 'intensity', label: '强度', default: 1, min: 0, max: 1, step: 0.01 }],
   },
   // creative looks (formula grades — not camera-log cubes)

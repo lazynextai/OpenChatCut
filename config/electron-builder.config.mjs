@@ -114,10 +114,12 @@ export default {
     // Exclude media/uploads because Vite copies all of public/ into dist, which would embed gigabytes of user assets.
     // uploadsMiddleware serves /media/uploads directly from the asset directory (userData in packaged builds),
     // so resources/dist never needs those files.
-    // Exclude luts/ — vendor camera-log LUTs (Sony S-Log3, Canon Log 3) have unverified redistribution
-    // rights; removed from distribution pending confirmation (see THIRD_PARTY_NOTICES.md §8, HANDOFF §12.11).
-    { from: 'dist', to: 'dist', filter: ['**/*', '!media/uploads/**', '!luts/**'] },
-    { from: 'desktop-dist/remotion-bundle', to: 'remotion-bundle', filter: ['**/*', '!luts/**', '!public/luts/**'] },
+    // Exclude the two VENDOR camera-log LUTs (Sony S-Log3, Canon Log 3) — their redistribution rights were not
+    // cleared (see THIRD_PARTY_NOTICES.md §8). Ship the ORIGINAL arrowlogy-*.cube transforms instead, which are
+    // generated from published standards formulas by scripts/gen-log-luts.mjs (re-implementation done 2026-11-23;
+    // original LUTs re-included in packaging starting with the next release).
+    { from: 'dist', to: 'dist', filter: ['**/*', '!media/uploads/**', '!luts/Sony_Slog3_s709.cube', '!luts/CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube'] },
+    { from: 'desktop-dist/remotion-bundle', to: 'remotion-bundle', filter: ['**/*', '!luts/Sony_Slog3_s709.cube', '!luts/CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube', '!public/luts/**'] },
     // Ship the AGPL §5(a) modified-source NOTICE as a packaged resource (root file is not in the asar files list).
     { from: 'NOTICE.md', to: 'NOTICE.md' },
     { from: 'desktop-dist/chrome-headless-shell', to: 'chrome-headless-shell' },

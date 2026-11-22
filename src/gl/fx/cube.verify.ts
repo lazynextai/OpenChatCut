@@ -1,4 +1,4 @@
-// .cube 解析器 + fxPasses LUT 挂载语义检查(npx tsx src/gl/fx/cube.check.ts)
+// .cube 解析器 + fxPasses LUT 挂载语义检查(npx tsx src/gl/fx/cube.verify.ts)
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { parseCube, primeCube, getCubeSync, cubeSettled, type CubeLut } from './cube';
@@ -50,7 +50,7 @@ for (const [name, text] of bad) {
 }
 
 // ── 4. 两份真实 .cube LUT 文件 ─────────────────────────────────────────
-for (const file of ['Sony_Slog3_s709.cube', 'CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube']) {
+for (const file of ['arrowlogy-slog3-rec709-33.cube', 'arrowlogy-canonlog3-bt709-33.cube']) {
   const lut = parseCube(readFileSync(`assets/luts/${file}`, 'utf8'));
   assert.equal(lut.size, 33, `${file} 应为 33³`);
   assert.equal(lut.data.length, 33 ** 3 * 3);

@@ -88,10 +88,10 @@ export default {
   '拍立得 / 一次性': 'Instant / Disposable',
   'CineStill 夜景': 'CineStill Night',
   // ── LUT descs ──
-  'Sony S-Log3 / S-Gamut3.Cine → Rec.709。.cube 三维查找表（Sony_Slog3_s709.cube, 33³）+ 通用 lut.frag（sampler3D，BT.709 编解码包夹）':
-    'Sony S-Log3 / S-Gamut3.Cine → Rec.709. Real .cube 3D LUT (Sony_Slog3_s709.cube, 33³) + shared lut.frag (sampler3D, wrapped in BT.709 encode/decode)',
-  'Canon Cinema Gamut / Canon Log 3 → Canon 709。.cube 三维查找表（CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube, 33³）+ 通用 lut.frag':
-    'Canon Cinema Gamut / Canon Log 3 → Canon 709. Real .cube 3D LUT (CinemaGamut_CanonLog3-to-Canon709_33_Ver.1.0.cube, 33³) + shared lut.frag',
+  'Sony S-Log3 / S-Gamut3.Cine → Rec.709。.cube 三维查找表（arrowlogy-slog3-rec709-33.cube, 33³）+ 通用 lut.frag（sampler3D，BT.709 编解码包夹）':
+    'Sony S-Log3 / S-Gamut3.Cine → Rec.709. Real .cube 3D LUT (arrowlogy-slog3-rec709-33.cube, 33³) + shared lut.frag (sampler3D, wrapped in BT.709 encode/decode)',
+  'Canon Cinema Gamut / Canon Log 3 → Canon 709。.cube 三维查找表（arrowlogy-canonlog3-bt709-33.cube, 33³）+ 通用 lut.frag':
+    'Canon Cinema Gamut / Canon Log 3 → Canon 709. Real .cube 3D LUT (arrowlogy-canonlog3-bt709-33.cube, 33³) + shared lut.frag',
   '阴影偏青、高光偏橙的好莱坞调色。': 'Hollywood grade: teal shadows, orange highlights.',
   '高对比黑白 + 轻微动态颗粒。': 'High-contrast black & white + subtle animated grain.',
   '偏暖色温与轻度褪色，复古质感。': 'Warm color temperature with a light fade — vintage feel.',
