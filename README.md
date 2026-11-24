@@ -18,28 +18,27 @@
 
 <p align="center">
   Let Codex, Claude Code, and the built-in agent read, edit, and export real video projects that remain fully editable.
-  Website: <a href="https://openchatcut.com">openchatcut.com</a>
+  Website: <a href="https://arrowlogy.com">arrowlogy.com</a>
 </p>
 
 <p align="center">
-  <a href="https://openchatcut.com/pro"><strong>Arrowlogy Pro</strong></a> · Desktop edition: install it and start cutting
+  <a href="https://arrowlogy.com/#download"><strong>Download Arrowlogy for macOS</strong></a> · free and open source (AGPL-3.0)
 </p>
 
 <p align="center">
-  <a href="#what-is-openchatcut">Introduction</a> ·
+  <a href="#what-is-arrowlogy">Introduction</a> ·
   <a href="#product-tour">Product Tour</a> ·
   <a href="#quick-start">Quick Start</a> ·
-  <a href="#using-openchatcut-with-codex--claude-code">Agent / MCP</a> ·
+  <a href="#using-arrowlogy-with-codex--claude-code">Agent / MCP</a> ·
   <a href="#community">Community</a> ·
-  <a href="#sponsors">Sponsors</a> ·
+  <a href="#download-and-support">Download</a> ·
   <a href="#changelog">Changelog</a> ·
   <a href="#star-growth">Star Growth</a> ·
   <a href="#contributing">Contributing</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/0xsline/OpenChatCut"><img alt="GitHub Repository" src="https://img.shields.io/badge/GitHub-Repository-181717?style=flat&logo=github" /></a>
-  <a href="https://discord.gg/bSGUAeWYkh"><img alt="Discord Community" src="https://img.shields.io/badge/Discord-Join_Community-5865F2?style=flat&logo=discord&logoColor=white" /></a>
+  <a href="https://github.com/lazynextai/OpenChatCut"><img alt="GitHub Repository" src="https://img.shields.io/badge/GitHub-Repository-181717?style=flat&logo=github" /></a>
   <img alt="Status" src="https://img.shields.io/badge/status-active_development-FF8A3D?style=flat" />
   <img alt="Local First" src="https://img.shields.io/badge/data-local_first-111827?style=flat" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-6-3178C6?style=flat&logo=typescript&logoColor=white" />
@@ -47,15 +46,6 @@
   <img alt="Remotion" src="https://img.shields.io/badge/Remotion-4-0B84F3?style=flat" />
   <img alt="Electron" src="https://img.shields.io/badge/Electron-43-47848F?style=flat&logo=electron&logoColor=white" />
   <img alt="MCP" src="https://img.shields.io/badge/MCP-Agent_native-7C3AED?style=flat" />
-  <a href="https://atomgit.com/Oxsline/openchatcut"><img alt="AtomGit G-Star" src="https://img.shields.io/badge/AtomGit-G--Star-DA203E?logo=gitcode&logoColor=white" /></a>
-</p>
-
-<p align="center">
-  <a href="https://linux.do" alt="LINUX DO"><img src="https://shorturl.at/ggSqS" /></a>
-</p>
-
-<p align="center">
-  <a href="https://www.producthunt.com/products/openchatcut?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-openchatcut" target="_blank" rel="noopener noreferrer"><img alt="Arrowlogy - Open-source AI agent video editor with a real timeline | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1201995&amp;theme=light&amp;t=1784645557617" /></a>
 </p>
 
 <p align="center">
@@ -67,29 +57,17 @@
 </p>
 
 ---
-## Sponsors
+## Download and support
 
-<p align="center">
-  <a href="https://ofox.ai/?utm_source=github&utm_medium=sponsorship&utm_content=openchatcut"><img src="assets/readme-pic/ofox-logo.svg" width="300" alt="OfoxAI" /></a>
-</p>
+Arrowlogy is free, open source, and self-funded. There is no paid tier and no
+donation link attached to this project.
 
-**OfoxAI: Text, image, and video AI in one platform**
+- **Download:** [arrowlogy.com](https://arrowlogy.com/#download) (macOS, Apple Silicon; unsigned build, first launch needs right-click → Open)
+- **Releases:** [github.com/lazynextai/arrowlogy/releases](https://github.com/lazynextai/arrowlogy/releases)
+- **Questions and feedback:** hello@arrowlogy.com
 
-OfoxAI is a unified API platform for text, image, and video AI, with video models from the Seedance, MiniMax (Hailuo), and Wan families. Choose models for AI applications, agents, creative ideation, image generation, and video assets through one platform.
-[Explore OfoxAI models and APIs →](https://ofox.ai/?utm_source=github&utm_medium=sponsorship&utm_content=openchatcut)
-
-<br />
-
-If Arrowlogy helps you, you can support its continued development on Ko-fi or Afdian.
-
-<p align="center">
-  <a href="https://ko-fi.com/Y5N2241IP5">
-    <img alt="Support me on Ko-fi" src="https://img.shields.io/badge/Support_me_on-Ko--fi-72a4f2?logo=kofi&amp;logoColor=white" />
-  </a>
-  <a href="https://www.ifdian.net/a/sline?utm_source=copylink&amp;utm_medium=link">
-    <img alt="Support Arrowlogy on Afdian" src="https://img.shields.io/badge/Support_on-Afdian-946CE6" />
-  </a>
-</p>
+The upstream OpenChatCut project has its own website, sponsors, and donation
+pages. Those belong to its authors, not to Arrowlogy, so they are not linked here.
 
 ---
 
@@ -103,9 +81,9 @@ It does not merely generate a video that can no longer be changed. Every edit is
 
 Arrowlogy is built for creators and developers who want AI to participate in the actual editing workflow without giving up professional control, rather than starting over from an empty chat box or an immutable generated result.
 
-- Website: [https://openchatcut.com](https://openchatcut.com)
-- Open-source ChatCut alternative guide: [https://openchatcut.com/blog/open-source-chatcut-alternative](https://openchatcut.com/blog/open-source-chatcut-alternative)
-- ChatCut vs Arrowlogy: [https://openchatcut.com/blog/chatcut-vs-openchatcut](https://openchatcut.com/blog/chatcut-vs-openchatcut)
+- Website: [https://arrowlogy.com](https://arrowlogy.com)
+- Source code: [https://github.com/lazynextai/OpenChatCut](https://github.com/lazynextai/OpenChatCut) (branch `arrowlogy/rebrand`)
+- Upstream project this fork is based on: [https://github.com/0xsline/OpenChatCut](https://github.com/0xsline/OpenChatCut)
 
 - 🤖 **Agent-native**: the built-in agent and external MCP agents share the same editing tools.
 - 🎞️ **Real timeline**: multiple video and audio tracks, transitions, effects, LUTs, zooms, and keyframes.
@@ -120,13 +98,12 @@ Arrowlogy is built for creators and developers who want AI to participate in the
 
 Join the Arrowlogy community to discuss workflows, share feedback, and follow development:
 
-- [Join Discord](https://discord.gg/bSGUAeWYkh)
-- Scan the QR code below with WeChat.
+- [GitHub Discussions](https://github.com/lazynextai/arrowlogy/discussions)
+- [Report an issue](https://github.com/lazynextai/arrowlogy/issues)
+- Email: hello@arrowlogy.com
 
-<p align="center">
-  <br />
-  <img src="assets/readme-pic/wechat-community.jpg" width="220" alt="Arrowlogy WeChat community QR code" />
-</p>
+The upstream OpenChatCut Discord and WeChat groups are run by that project's
+authors, not by Arrowlogy, so they are not linked here.
 
 ---
 
@@ -212,25 +189,9 @@ Describe the goal → Agent reads the project → Produces verifiable edits → 
 
 ## Community Resources
 
-The [Arrowlogy resource library](https://openchatcut.com/resources) is a shared catalog for reusable MG animations, sound effects, transitions, visual effects, zooms, and LUTs.
+Arrowlogy ships a built-in resource library for reusable MG animations, sound effects, transitions, visual effects, zooms, and LUTs. Open the Extension Center inside the app to browse, install, and manage resources locally.
 
-<p align="center">
-  <a href="https://openchatcut.com/resources">
-    <img src="assets/readme-pic/08-community-resources.en.png" alt="Arrowlogy community resource library" />
-  </a>
-</p>
-
-### Discover and install
-
-- Hover visual cards to watch the complete result, or play audio resources before downloading.
-- Copy a resource's install URL into Arrowlogy's Extension Center, or download its original package.
-- Browse the website catalog inside the editor and manage installed extensions locally.
-
-### Contribute a resource
-
-1. Open [Contribute a resource](https://openchatcut.com/resources/submit) and choose its category.
-2. Upload the resource and the category-specific preview inputs; the site renders the published preview.
-3. Add the creator and license information, then submit it for review and publication.
+There is no hosted Arrowlogy resource catalog yet. The upstream OpenChatCut resource site belongs to that project and is not an Arrowlogy service.
 
 Installable visual resources use the editor's `openchatcut-plugin@1` format and runtime validation. Official Arrowlogy resources use the MIT license; community contributors select a license during submission, and each published card identifies its creator and license.
 
@@ -259,9 +220,9 @@ Installable visual resources use the editor's `openchatcut-plugin@1` format and 
 
 ### Desktop installers
 
-Download the latest macOS, Windows, and Linux builds from [GitHub Releases](https://github.com/0xsline/OpenChatCut/releases/latest). The release currently includes DMG installers for Apple Silicon and Intel Macs, an x64 Windows installer, and an x64 Linux AppImage.
+Download the latest macOS build (Apple Silicon, M1 or newer) from [Arrowlogy Releases](https://github.com/lazynextai/arrowlogy/releases/latest) or from [arrowlogy.com](https://arrowlogy.com/#download). Windows and Linux builds are not published yet.
 
-These are early builds. The macOS packages are not yet signed or notarized, so the operating system may require manual approval on first launch.
+These are early builds. The macOS package is not signed or notarized, so macOS may require manual approval on first launch: right-click the app → **Open** → **Open** again, or use System Settings → Privacy & Security → **Open Anyway**.
 
 ### Run from source
 
@@ -270,7 +231,7 @@ Requires Node.js 24.x and npm. The supported Node.js range is enforced by `packa
 On Linux x64, `npm install` also downloads ONNX Runtime's optional CUDA provider (several hundred MB from NuGet). For a CPU-only install, run `ONNXRUNTIME_NODE_INSTALL=skip npm install` instead.
 
 ```bash
-git clone https://github.com/0xsline/OpenChatCut.git
+git clone --branch arrowlogy/rebrand https://github.com/lazynextai/OpenChatCut.git Arrowlogy
 cd Arrowlogy
 npm install
 cp .env.example .env.local
@@ -324,7 +285,7 @@ The desktop app uses an Electron shell with the same embedded services. The web 
 
 ## Project Status
 
-Arrowlogy is under active development. The editor, project format, and agent tools will continue to evolve. Prebuilt macOS, Windows, and Linux installers are published on [GitHub Releases](https://github.com/0xsline/OpenChatCut/releases); running from source remains the most transparent option for development and troubleshooting.
+Arrowlogy is under active development. The editor, project format, and agent tools will continue to evolve. Prebuilt macOS (Apple Silicon) installers are published on [Arrowlogy Releases](https://github.com/lazynextai/arrowlogy/releases); running from source remains the most transparent option for development and troubleshooting.
 
 The core timeline, local projects, built-in media, and manual editing do not depend on cloud services. Connected features such as AI models, online media, generation, and transcription are enabled only after you configure the corresponding services.
 
@@ -335,7 +296,7 @@ The core timeline, local projects, built-in media, and manual editing do not dep
 Install the single Arrowlogy Agent Skill:
 
 ```bash
-npx skills add 0xsline/OpenChatCut
+npx skills add lazynextai/OpenChatCut
 ```
 
 Then tell the agent `Set up Arrowlogy`. The installed router registers the
@@ -569,21 +530,15 @@ This list covers the project's major technical foundations. It does not replace 
 
 ## Changelog
 
-See the bilingual [`CHANGELOG.md`](CHANGELOG.md) for notable changes, or browse all published packages on [GitHub Releases](https://github.com/0xsline/OpenChatCut/releases).
+See the bilingual [`CHANGELOG.md`](CHANGELOG.md) for notable changes, or browse all published packages on [Arrowlogy Releases](https://github.com/lazynextai/arrowlogy/releases).
 
 ---
 
 ## Star Growth
 
-<p align="center">
-  <a href="https://www.star-history.com/?type=date&repos=0xsline%2FOpenChatCut">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=0xsline/OpenChatCut&type=date&theme=dark&legend=top-left&sealed_token=KKfeYtGGCjyG1QN9_Ev6Tvyyrcp5LW6bzOT8ZKED1EE0qNRqM3KrThzzbXWdcP6K-sr3vKbmoFZYDviSMtf8SI5UqAPYQf9v8qXCpM04S2C4LQTAKPbexT66SI3Q8pcHJJoMT7VCZnGp93LqIXZchAyYfTMmKy_y_LFOJ-_ruEq8GP1kVESXshaFzJfC" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=0xsline/OpenChatCut&type=date&legend=top-left&sealed_token=KKfeYtGGCjyG1QN9_Ev6Tvyyrcp5LW6bzOT8ZKED1EE0qNRqM3KrThzzbXWdcP6K-sr3vKbmoFZYDviSMtf8SI5UqAPYQf9v8qXCpM04S2C4LQTAKPbexT66SI3Q8pcHJJoMT7VCZnGp93LqIXZchAyYfTMmKy_y_LFOJ-_ruEq8GP1kVESXshaFzJfC" />
-      <img alt="Arrowlogy Star History Chart" src="https://api.star-history.com/chart?repos=0xsline/OpenChatCut&type=date&legend=top-left&sealed_token=KKfeYtGGCjyG1QN9_Ev6Tvyyrcp5LW6bzOT8ZKED1EE0qNRqM3KrThzzbXWdcP6K-sr3vKbmoFZYDviSMtf8SI5UqAPYQf9v8qXCpM04S2C4LQTAKPbexT66SI3Q8pcHJJoMT7VCZnGp93LqIXZchAyYfTMmKy_y_LFOJ-_ruEq8GP1kVESXshaFzJfC" />
-    </picture>
-  </a>
-</p>
+Arrowlogy does not publish a star-history chart. Star counts for the upstream
+OpenChatCut repository are visible on [its GitHub page](https://github.com/0xsline/OpenChatCut);
+this fork's activity lives on [lazynextai/OpenChatCut](https://github.com/lazynextai/OpenChatCut).
 
 ---
 
@@ -626,4 +581,4 @@ the chat starts a new ID; the project ID and chat text are never used as that ID
 3. Run `npm test`, `npm run lint`, and `npm run build` before committing.
 4. Open a Pull Request and include screenshots or acceptance evidence for UI or video-behavior changes.
 
-Use [GitHub Issues](https://github.com/0xsline/OpenChatCut/issues) for bug reports and feature requests.
+Use [GitHub Issues](https://github.com/lazynextai/arrowlogy/issues) for bug reports and feature requests.

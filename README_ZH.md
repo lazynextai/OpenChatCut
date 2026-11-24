@@ -18,28 +18,27 @@
 
 <p align="center">
   让 Codex、Claude Code 和内置 Agent 直接读取、剪辑并导出可继续编辑的真实视频工程。
-  官网：<a href="https://openchatcut.com">openchatcut.com</a>
+  官网：<a href="https://arrowlogy.com">arrowlogy.com</a>
 </p>
 
 <p align="center">
-  <a href="https://openchatcut.com/zh/pro"><strong>Arrowlogy Pro</strong></a> · 桌面版：装好就能剪
+  <a href="https://arrowlogy.com/#download"><strong>下载 Arrowlogy macOS 版</strong></a> · 免费开源（AGPL-3.0）
 </p>
 
 <p align="center">
-  <a href="#openchatcut-是什么">产品介绍</a> ·
+  <a href="#arrowlogy-是什么">产品介绍</a> ·
   <a href="#产品导览">产品导览</a> ·
   <a href="#快速开始">快速开始</a> ·
   <a href="#在-codex--claude-code-中使用">Agent / MCP</a> ·
   <a href="#社区">社区</a> ·
-  <a href="#赞助商">赞助商</a> ·
+  <a href="#下载与支持">下载与支持</a> ·
   <a href="#更新日志">更新日志</a> ·
   <a href="#star-趋势">Star 趋势</a> ·
   <a href="#贡献">参与贡献</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/0xsline/OpenChatCut"><img alt="GitHub Repository" src="https://img.shields.io/badge/GitHub-Repository-181717?style=flat&logo=github" /></a>
-  <a href="https://discord.gg/bSGUAeWYkh"><img alt="Discord 社区" src="https://img.shields.io/badge/Discord-Join_Community-5865F2?style=flat&logo=discord&logoColor=white" /></a>
+  <a href="https://github.com/lazynextai/OpenChatCut"><img alt="GitHub Repository" src="https://img.shields.io/badge/GitHub-Repository-181717?style=flat&logo=github" /></a>
   <img alt="Status" src="https://img.shields.io/badge/status-active_development-FF8A3D?style=flat" />
   <img alt="Local First" src="https://img.shields.io/badge/data-local_first-111827?style=flat" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-6-3178C6?style=flat&logo=typescript&logoColor=white" />
@@ -47,15 +46,6 @@
   <img alt="Remotion" src="https://img.shields.io/badge/Remotion-4-0B84F3?style=flat" />
   <img alt="Electron" src="https://img.shields.io/badge/Electron-43-47848F?style=flat&logo=electron&logoColor=white" />
   <img alt="MCP" src="https://img.shields.io/badge/MCP-Agent_native-7C3AED?style=flat" />
-  <a href="https://atomgit.com/Oxsline/openchatcut"><img alt="AtomGit G-Star" src="https://img.shields.io/badge/AtomGit-G--Star-DA203E?logo=gitcode&logoColor=white" /></a>
-</p>
-
-<p align="center">
-  <a href="https://linux.do" alt="LINUX DO"><img src="https://shorturl.at/ggSqS" /></a>
-</p>
-
-<p align="center">
-  <a href="https://www.producthunt.com/products/openchatcut?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-openchatcut" target="_blank" rel="noopener noreferrer"><img alt="Arrowlogy - 带真实时间线的开源 AI Agent 视频编辑器 | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1201995&amp;theme=light&amp;t=1784645557617" /></a>
 </p>
 
 <p align="center">
@@ -67,29 +57,15 @@
 </p>
 
 ---
-## 赞助商
+## 下载与支持
 
-<p align="center">
-  <a href="https://ofox.ai/?utm_source=github&utm_medium=sponsorship&utm_content=openchatcut"><img src="assets/readme-pic/ofox-logo.svg" width="300" alt="OfoxAI" /></a>
-</p>
+Arrowlogy 免费、开源，由项目自身承担开发成本。本项目没有付费版本，也没有附带捐赠链接。
 
-**OfoxAI：一个平台，连接文本、图像与视频 AI**
+- **下载：** [arrowlogy.com](https://arrowlogy.com/#download)（macOS，Apple Silicon；未签名构建，首次打开需右键 → 打开）
+- **发布页：** [github.com/lazynextai/arrowlogy/releases](https://github.com/lazynextai/arrowlogy/releases)
+- **问题与反馈：** hello@arrowlogy.com
 
-OfoxAI 是统一的 AI API 平台，汇集文本、图像和视频模型，支持 Seedance、MiniMax（海螺）、Wan 等视频模型系列。从 AI 应用与智能体开发，到创意构思、图像生成和视频素材制作，通过一个平台选择适合的模型。
-[探索 OfoxAI 模型与 API →](https://ofox.ai/?utm_source=github&utm_medium=sponsorship&utm_content=openchatcut)
-
-<br />
-
-如果 Arrowlogy 对你有帮助，欢迎通过 Ko-fi 或爱发电支持项目持续开发。
-
-<p align="center">
-  <a href="https://ko-fi.com/Y5N2241IP5">
-    <img alt="通过 Ko-fi 支持项目" src="https://img.shields.io/badge/Support_me_on-Ko--fi-72a4f2?logo=kofi&amp;logoColor=white" />
-  </a>
-  <a href="https://www.ifdian.net/a/sline?utm_source=copylink&amp;utm_medium=link">
-    <img alt="通过爱发电支持 Arrowlogy" src="https://img.shields.io/badge/%E6%94%AF%E6%8C%81%E9%A1%B9%E7%9B%AE-%E7%88%B1%E5%8F%91%E7%94%B5-946CE6" />
-  </a>
-</p>
+上游 OpenChatCut 项目有自己的官网、赞助商与捐赠页面。那些属于其作者，不属于 Arrowlogy，因此这里不再链接。
 
 ---
 
@@ -103,9 +79,9 @@ Arrowlogy 是 **开源 ChatCut 替代方案**：把 **对话式 Agent** 和 **�
 
 它适合希望让 AI 真正参与剪辑流程、同时保留专业编辑控制权的创作者和开发者，而不是每次都从一个空白聊天框或不可修改的生成结果重新开始。
 
-- 官网：[https://openchatcut.com](https://openchatcut.com)
-- 开源 ChatCut 替代说明：[https://openchatcut.com/zh/blog/open-source-chatcut-alternative](https://openchatcut.com/zh/blog/open-source-chatcut-alternative)
-- ChatCut 与 Arrowlogy 对比：[https://openchatcut.com/zh/blog/chatcut-vs-openchatcut](https://openchatcut.com/zh/blog/chatcut-vs-openchatcut)
+- 官网：[https://arrowlogy.com](https://arrowlogy.com)
+- 源代码：[https://github.com/lazynextai/OpenChatCut](https://github.com/lazynextai/OpenChatCut)（分支 `arrowlogy/rebrand`）
+- 本项目基于的上游项目：[https://github.com/0xsline/OpenChatCut](https://github.com/0xsline/OpenChatCut)
 
 - 🤖 **Agent-native**：内置 Agent 与外部 MCP Agent 共用同一套编辑工具。
 - 🎞️ **真实时间线**：多视频轨、多音频轨、转场、特效、LUT、缩放和关键帧。
@@ -120,13 +96,11 @@ Arrowlogy 是 **开源 ChatCut 替代方案**：把 **对话式 Agent** 和 **�
 
 加入 Arrowlogy 社区，交流使用心得、功能建议与开发进展：
 
-- [加入 Discord](https://discord.gg/bSGUAeWYkh)
-- 使用微信扫描下方二维码加入微信群。
+- [GitHub Discussions](https://github.com/lazynextai/arrowlogy/discussions)
+- [提交问题](https://github.com/lazynextai/arrowlogy/issues)
+- 邮箱：hello@arrowlogy.com
 
-<p align="center">
-  <br />
-  <img src="assets/readme-pic/wechat-community.jpg" width="220" alt="Arrowlogy 微信社区二维码" />
-</p>
+上游 OpenChatCut 的 Discord 与微信群由该项目作者维护，不属于 Arrowlogy，因此这里不再链接。
 
 ---
 
@@ -212,25 +186,9 @@ Arrowlogy 是 **开源 ChatCut 替代方案**：把 **对话式 Agent** 和 **�
 
 ## 社区资源库
 
-[Arrowlogy 社区资源库](https://openchatcut.com/zh/resources)用于发现、安装和分享可复用的 MG 动画、音效、转场、特效、缩放和 LUT。
+Arrowlogy 内置资源库，可复用 MG 动画、音效、转场、特效、缩放与 LUT。在应用内打开扩展中心，即可浏览、安装并在本机管理资源。
 
-<p align="center">
-  <a href="https://openchatcut.com/zh/resources">
-    <img src="assets/readme-pic/08-community-resources.png" alt="Arrowlogy 社区资源库" />
-  </a>
-</p>
-
-### 发现与安装
-
-- 悬停视觉卡片查看完整变化，下载前可直接试听音频资源。
-- 复制资源的安装 URL 到 Arrowlogy 扩展中心，或下载原始资源包。
-- 在编辑器内浏览官网目录，并在本机管理已安装扩展。
-
-### 贡献资源
-
-1. 打开[贡献资源](https://openchatcut.com/zh/resources/submit)，选择资源分类。
-2. 上传资源与该分类要求的预览输入，网站会渲染用于公开展示的预览。
-3. 填写作者和许可证信息，提交审核；审核通过后公开上架。
+Arrowlogy 目前没有自建的在线资源目录。上游 OpenChatCut 的资源站属于该项目，不是 Arrowlogy 的服务。
 
 可安装的视觉资源沿用编辑器的 `openchatcut-plugin@1` 格式与运行时校验。Arrowlogy 官方资源使用 MIT 许可证；社区投稿者在提交时选择许可证，发布卡片会显示作者与许可信息。
 
@@ -259,9 +217,9 @@ Arrowlogy 是 **开源 ChatCut 替代方案**：把 **对话式 Agent** 和 **�
 
 ### 桌面安装包
 
-从 [GitHub Releases](https://github.com/0xsline/OpenChatCut/releases/latest) 下载最新的 macOS、Windows 与 Linux 构建。目前提供 Apple Silicon、Intel Mac 的 DMG、Windows x64 安装包，以及 Linux x64 AppImage。
+从 [Arrowlogy Releases](https://github.com/lazynextai/arrowlogy/releases/latest) 或 [arrowlogy.com](https://arrowlogy.com/#download) 下载最新的 macOS 构建（Apple Silicon，M1 及更新机型）。Windows 与 Linux 构建尚未发布。
 
-这些仍是早期构建。macOS 安装包尚未签名和公证，首次启动时可能需要在系统设置中手动允许。
+这些仍是早期构建。macOS 安装包尚未签名和公证，首次启动时可能需要在系统设置中手动允许：右键应用 → **打开** → 再次 **打开**，或在“系统设置 → 隐私与安全性”中点击 **仍要打开**。
 
 ### 从源码运行
 
@@ -270,7 +228,7 @@ Arrowlogy 是 **开源 ChatCut 替代方案**：把 **对话式 Agent** 和 **�
 在 Linux x64 上，`npm install` 还会从 NuGet 下载 ONNX Runtime 可选的 CUDA 组件（数百 MB）。只需 CPU 推理时，可改用 `ONNXRUNTIME_NODE_INSTALL=skip npm install`。
 
 ```bash
-git clone https://github.com/0xsline/OpenChatCut.git
+git clone --branch arrowlogy/rebrand https://github.com/lazynextai/OpenChatCut.git Arrowlogy
 cd Arrowlogy
 npm install
 cp .env.example .env.local
@@ -321,7 +279,7 @@ npm run desktop:dev
 
 ## 项目状态
 
-Arrowlogy 目前处于积极开发阶段，编辑器、工程格式和 Agent 工具仍会持续迭代。预构建的 macOS、Windows 与 Linux 安装包已发布到 [GitHub Releases](https://github.com/0xsline/OpenChatCut/releases)；开发和排障时，从源码运行仍是最透明的方式。
+Arrowlogy 目前处于积极开发阶段，编辑器、工程格式和 Agent 工具仍会持续迭代。预构建的 macOS（Apple Silicon）安装包已发布到 [Arrowlogy Releases](https://github.com/lazynextai/arrowlogy/releases)；开发和排障时，从源码运行仍是最透明的方式。
 
 基础时间线、本地工程、内置素材和手动编辑不依赖云服务。AI 模型、在线素材、生成、转写等联网能力只在你配置对应服务后启用。
 
@@ -332,7 +290,7 @@ Arrowlogy 目前处于积极开发阶段，编辑器、工程格式和 Agent 工
 安装单入口 Arrowlogy Agent Skill：
 
 ```bash
-npx skills add 0xsline/OpenChatCut
+npx skills add lazynextai/OpenChatCut
 ```
 
 然后对 Agent 说“设置 Arrowlogy”。安装的路由 Skill 会注册本地 MCP
@@ -559,21 +517,13 @@ Arrowlogy 基于以下核心项目与规范构建：
 
 ## 更新日志
 
-重要变更见中英双语的 [`CHANGELOG.md`](CHANGELOG.md)，所有已发布安装包与源码包见 [GitHub Releases](https://github.com/0xsline/OpenChatCut/releases)。
+重要变更见中英双语的 [`CHANGELOG.md`](CHANGELOG.md)，所有已发布安装包与源码包见 [Arrowlogy Releases](https://github.com/lazynextai/arrowlogy/releases)。
 
 ---
 
 ## Star 趋势
 
-<p align="center">
-  <a href="https://www.star-history.com/?type=date&repos=0xsline%2FOpenChatCut">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=0xsline/OpenChatCut&type=date&theme=dark&legend=top-left&sealed_token=KKfeYtGGCjyG1QN9_Ev6Tvyyrcp5LW6bzOT8ZKED1EE0qNRqM3KrThzzbXWdcP6K-sr3vKbmoFZYDviSMtf8SI5UqAPYQf9v8qXCpM04S2C4LQTAKPbexT66SI3Q8pcHJJoMT7VCZnGp93LqIXZchAyYfTMmKy_y_LFOJ-_ruEq8GP1kVESXshaFzJfC" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=0xsline/OpenChatCut&type=date&legend=top-left&sealed_token=KKfeYtGGCjyG1QN9_Ev6Tvyyrcp5LW6bzOT8ZKED1EE0qNRqM3KrThzzbXWdcP6K-sr3vKbmoFZYDviSMtf8SI5UqAPYQf9v8qXCpM04S2C4LQTAKPbexT66SI3Q8pcHJJoMT7VCZnGp93LqIXZchAyYfTMmKy_y_LFOJ-_ruEq8GP1kVESXshaFzJfC" />
-      <img alt="Arrowlogy Star 增长趋势图" src="https://api.star-history.com/chart?repos=0xsline/OpenChatCut&type=date&legend=top-left&sealed_token=KKfeYtGGCjyG1QN9_Ev6Tvyyrcp5LW6bzOT8ZKED1EE0qNRqM3KrThzzbXWdcP6K-sr3vKbmoFZYDviSMtf8SI5UqAPYQf9v8qXCpM04S2C4LQTAKPbexT66SI3Q8pcHJJoMT7VCZnGp93LqIXZchAyYfTMmKy_y_LFOJ-_ruEq8GP1kVESXshaFzJfC" />
-    </picture>
-  </a>
-</p>
+Arrowlogy 不发布 star 历史图表。上游 OpenChatCut 仓库的 star 数可在 [其 GitHub 页面](https://github.com/0xsline/OpenChatCut) 查看；本 fork 的动态在 [lazynextai/OpenChatCut](https://github.com/lazynextai/OpenChatCut)。
 
 ---
 
@@ -608,4 +558,4 @@ Markdown 摘要，网页阅读返回 Markdown 正文；Parallel 搜索返回来�
 3. 提交前运行 `npm test`、`npm run lint` 和 `npm run build`。
 4. 发起 Pull Request，并附上涉及 UI 或视频行为的截图/验收证据。
 
-问题与功能建议请使用 [GitHub Issues](https://github.com/0xsline/OpenChatCut/issues)。
+问题与功能建议请使用 [GitHub Issues](https://github.com/lazynextai/arrowlogy/issues)。
