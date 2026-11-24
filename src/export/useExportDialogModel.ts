@@ -109,6 +109,8 @@ export interface ExportWorkflowModel {
   jobs: readonly BackgroundExportJob[];
   progress: ExportProgress | null;
   qa: ExportQaUiState | null;
+  queueRun: () => Promise<void>;
+  queuedCount: number;
   renderEngine: RenderEngine;
   resetFeedback: () => void;
   selectedJobId: string | null;
@@ -133,6 +135,7 @@ export interface ExportDialogModel {
   videoSummary: string;
   workflow: ExportWorkflowModel;
   disabled: boolean;
+  queueDisabled: boolean;
   qualityMode: QualityMode;
   setQualityMode: (mode: QualityMode) => void;
 }
@@ -227,9 +230,12 @@ export function useExportDialogModel({ state, project, projectId, projectName, e
   const disabled = !!workflow.busy
     || (tab === 'subtitles' && !subtitles.captions)
     || (tab === 'mg' && mgItems.length === 0);
+  // Queuing stays available while another export runs — that is the point.
+  const queueDisabled = (tab === 'subtitles' && !subtitles.captions)
+    || (tab === 'mg' && mgItems.length === 0);
   return {
     tab, setTab, video, subtitles, nleFormat, setNleFormat, includeMg, setIncludeMg,
-    mgItems, base, outputName: name, videoSummary, workflow, disabled,
+    mgItems, base, outputName: name, videoSummary, workflow, disabled, queueDisabled,
     qualityMode, setQualityMode,
   };
 }

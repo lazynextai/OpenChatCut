@@ -67,12 +67,13 @@ interface ExportFooterProps {
   outputName: string;
   videoSummary: string;
   disabled: boolean;
+  queueDisabled: boolean;
   workflow: ExportWorkflowModel;
 }
 
-export function ExportFooter({ tab, outputName, videoSummary, disabled, workflow }: ExportFooterProps) {
+export function ExportFooter({ tab, outputName, videoSummary, disabled, queueDisabled, workflow }: ExportFooterProps) {
   const t = useT();
-  const { busy, cancelExport, clock, progress, renderEngine, run } = workflow;
+  const { busy, cancelExport, clock, progress, queuedCount, queueRun, renderEngine, run } = workflow;
   const cancellablePhase = progress?.phase === 'queued'
     || progress?.phase === 'preparing'
     || progress?.phase === 'rendering';
@@ -88,6 +89,13 @@ export function ExportFooter({ tab, outputName, videoSummary, disabled, workflow
       </div>
       {cancellable && (
         <button type="button" className="cc-export-cancel" onClick={cancelExport}>{t('取消')}</button>
+      )}
+      {tab !== 'jianying' && (
+        <button type="button" className="cc-export-cancel cc-export-queue" onClick={() => void queueRun()} disabled={queueDisabled}
+          title={t('按顺序依次导出，前一个完成后自动开始')}>
+          {t('加入导出队列')}
+          {queuedCount > 0 && <span className="cc-export-queue-count">{queuedCount}</span>}
+        </button>
       )}
       {tab !== 'jianying' && (
         <button type="button" className="cc-export-cta" onClick={() => void run()} disabled={disabled}>

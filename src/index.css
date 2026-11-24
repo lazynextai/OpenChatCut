@@ -1089,6 +1089,9 @@ button, input, select { font: inherit; }
 .cc-export-output small { margin-top:2px; color:var(--cc-text-dim); font:9.5px/1.2 Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace; }
 .cc-export-cancel { height:34px; padding:0 12px; border:0.5px solid var(--cc-border-light); border-radius:4px; background:var(--cc-bg); color:var(--cc-text-muted); font-size:11px; font-weight:600; cursor:pointer; }
 .cc-export-cancel:hover { border-color:var(--cc-text-dim); color:var(--cc-text); }
+.cc-export-queue { display:flex; align-items:center; gap:6px; }
+.cc-export-queue:disabled { cursor:default; opacity:.5; }
+.cc-export-queue-count { min-width:16px; height:16px; display:grid; place-items:center; padding:0 4px; border-radius:8px; background:var(--cc-accent); color:var(--cc-on-accent); font-size:10px; }
 .cc-export-cta { min-width:130px; height:34px; display:flex; align-items:center; justify-content:center; gap:7px; padding:0 14px; border:0; border-radius:4px; background:var(--cc-accent); color:var(--cc-on-accent); font-size:11.5px; font-weight:700; cursor:pointer; }
 .cc-export-cta:hover:not(:disabled) { background:var(--cc-accent-deep); }
 .cc-export-cta:disabled { cursor:default; opacity:.5; }

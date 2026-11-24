@@ -35,7 +35,7 @@ function ExportMainHeader({ model }: { model: ExportDialogModel }) {
 
 function BackgroundExportJobs({ model }: { model: ExportDialogModel }) {
   const t = useT();
-  const { jobs, selectedJobId, viewJob, cancelJob } = model.workflow;
+  const { jobs, selectedJobId, viewJob, cancelJob, queuedCount } = model.workflow;
   if (jobs.length === 0) return null;
   return (
     <section className="cc-export-progress" aria-label={t('后台导出任务')}>
@@ -43,6 +43,11 @@ function BackgroundExportJobs({ model }: { model: ExportDialogModel }) {
         <strong>{t('后台导出')}</strong>
         <span>{jobs.length}</span>
       </div>
+      {queuedCount > 0 && (
+        <div className="cc-export-progress-meta">
+          <span>{t('队列中还有 {n} 个导出', { n: queuedCount })}</span>
+        </div>
+      )}
       {jobs.map((job) => {
         const terminal = job.progress.phase === 'completed'
           || job.progress.phase === 'failed'
@@ -110,7 +115,7 @@ export function ExportDialogMain({ state, project, model }: { state: TimelineSta
           destination={workflow.destination} onChoose={workflow.chooseDestination} />
       )}
       <ExportFooter tab={model.tab} outputName={model.outputName} videoSummary={model.videoSummary}
-        disabled={model.disabled} workflow={workflow} />
+        disabled={model.disabled} queueDisabled={model.queueDisabled} workflow={workflow} />
     </main>
   );
 }

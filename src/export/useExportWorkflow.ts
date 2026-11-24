@@ -6,7 +6,9 @@ import {
   type BackgroundExportJobSetters,
   type BackgroundExportJob,
   type ExportJobStore,
+  type StartBackgroundExport,
 } from './backgroundExportStore';
+import { type BatchExportQueue, createBatchExportQueue } from './batchExportQueue';
 import { createExportVerifier } from './exportQaOperation';
 import { createExportRunner } from './exportRunOperation';
 import {
@@ -148,6 +150,18 @@ export function initialExportDialogJobId(jobs: readonly BackgroundExportJob[]): 
   return latest?.progress.phase === 'completed' ? null : latest?.id ?? null;
 }
 
+// One queue per job store, kept outside the component so closing the dialog
+// while a batch is still pumping does not drop the remaining items.
+const batchQueues = new WeakMap<ExportJobStore, BatchExportQueue>();
+function batchQueueFor(store: ExportJobStore): BatchExportQueue {
+  let queue = batchQueues.get(store);
+  if (!queue) {
+    queue = createBatchExportQueue(store);
+    batchQueues.set(store, queue);
+  }
+  return queue;
+}
+
 function recoveredServerRenderId(jobId: string | null): string | null {
   return jobId?.startsWith(RECOVERED_SERVER_EXPORT_PREFIX)
     ? jobId.slice(RECOVERED_SERVER_EXPORT_PREFIX.length)
@@ -163,26 +177,25 @@ export function useExportWorkflow(options: UseExportWorkflowOptions, exportJobs:
   const [autoQaEnabled, setAutoQaEnabled] = useState(() => loadExportAutoQaPreference().enabled);
   const destinationState = useExportDestination(suggestedExportFilename(options));
   const jobSnapshot = useSyncExternalStore(exportJobs.subscribe, exportJobs.getSnapshot, exportJobs.getSnapshot);
+  const batchQueue = batchQueueFor(exportJobs);
+  const queuedCount = useSyncExternalStore(batchQueue.subscribe, batchQueue.pendingCount, batchQueue.pendingCount);
   const viewedJob = viewedJobId ? jobSnapshot.jobs.find((job) => job.id === viewedJobId) : undefined;
   const state = viewedJob ?? EMPTY_WORKFLOW;
 
-  const run = async () => {
-    if (state.busy) return;
-    if (state.progress?.phase === 'completed') {
-      options.onClose();
-      return;
-    }
+  // Shared capture step: everything an export needs, frozen at press time so a
+  // queued item keeps the settings and snapshot it was enqueued with.
+  const buildExportSpec = async (): Promise<StartBackgroundExport | null> => {
     const retainedRenderId = recoveredServerRenderId(viewedJobId);
     if (retainedRenderId) {
       try {
         const retired = await retirePersistedServerExport(retainedRenderId);
         if (!retired) {
           setSetupError(t('此导出正在由另一个窗口恢复，请稍后重试'));
-          return;
+          return null;
         }
       } catch (error) {
         setSetupError(exportDestinationErrorMessage(error, t));
-        return;
+        return null;
       }
     }
     const filename = suggestedExportFilename(options) ?? `${options.base}-${options.tab}`;
@@ -191,7 +204,7 @@ export function useExportWorkflow(options: UseExportWorkflowOptions, exportJobs:
       targetPath = exportDestinationTargetPath(destinationState.destination, filename);
     } catch (error) {
       setSetupError(exportDestinationErrorMessage(error, t));
-      return;
+      return null;
     }
     setSetupError(null);
     let capturedOptions = snapshotWorkflowOptions(options);
@@ -207,10 +220,10 @@ export function useExportWorkflow(options: UseExportWorkflowOptions, exportJobs:
       capturedOptions = await materializeBlobMedia(capturedOptions, { mediaPlanSnapshot });
     } catch (error) {
       setSetupError(exportDestinationErrorMessage(error, t));
-      return;
+      return null;
     }
     const capturedDestination = destinationState.destination;
-    const jobId = exportJobs.start({
+    return {
       label: filename,
       targetPath,
       async execute({ signal, setters }) {
@@ -236,8 +249,28 @@ export function useExportWorkflow(options: UseExportWorkflowOptions, exportJobs:
         });
         await execute();
       },
-    });
-    setViewedJobId(jobId);
+    };
+  };
+  const run = async () => {
+    if (state.busy) return;
+    if (state.progress?.phase === 'completed') {
+      options.onClose();
+      return;
+    }
+    const spec = await buildExportSpec();
+    if (!spec) return;
+    setViewedJobId(exportJobs.start(spec));
+  };
+  // Append the current tab/sequence to the sequential batch queue. The
+  // controller starts it once every active job has drained.
+  const queueRun = async () => {
+    if (recoveredServerRenderId(viewedJobId)) {
+      setSetupError(t('请先恢复此导出，再加入队列'));
+      return;
+    }
+    const spec = await buildExportSpec();
+    if (!spec) return;
+    batchQueue.enqueue([spec]);
   };
   const chooseDestination = async () => {
     setSetupError(null);
@@ -282,6 +315,8 @@ export function useExportWorkflow(options: UseExportWorkflowOptions, exportJobs:
     jobs: jobSnapshot.jobs,
     progress: state.progress,
     qa: state.qa,
+    queueRun,
+    queuedCount,
     renderEngine: state.renderEngine,
     resetFeedback: () => {
       setSetupError(null);
