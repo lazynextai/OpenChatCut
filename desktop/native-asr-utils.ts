@@ -68,6 +68,21 @@ export function whisperLanguage(language: string | undefined): string {
   return value.slice(0, 3);
 }
 
+/**
+ * Whole-word repairs for brand misspellings the small GGML model still emits
+ * even with a vocabulary prompt (`--prompt`, verified: "urology", "Errowlogy").
+ * Deliberately narrow, not a spell-checker: novel misspellings slip through,
+ * and "urology" is also a real word, so a genuine mention of the medical
+ * specialty would be rewritten as "Arrowlogy".
+ */
+const BRAND_TERM_REPAIRS: readonly (readonly [RegExp, string])[] = [
+  [/\b(?:urology|arrow\s*logy|arrowlogy|errowlogy|erowlogy|arowlogy|arrology)\b/gi, 'Arrowlogy'],
+];
+
+export function repairBrandTerms(text: string): string {
+  return BRAND_TERM_REPAIRS.reduce((value, [pattern, replacement]) => value.replace(pattern, replacement), text);
+}
+
 // whisper.cpp emits BPE tokens, not words: only a token whose raw text begins
 // with whitespace opens a new word (" Привет"), and the pieces that follow
 // continue it ("тест" + "ов" + "ая" = "тестовая"); punctuation belongs to the

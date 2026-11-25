@@ -26,6 +26,7 @@ import { NativeAsrWorkerLifecycle } from './native-asr-worker-lifecycle.ts';
 import { extractPcm } from './native-asr-pcm.ts';
 import {
   nativeGgmlFileName,
+  repairBrandTerms,
   whisperLanguage,
   whisperServerVadArgs,
   whisperTokensToChunks,
@@ -38,6 +39,39 @@ import {
 const SAMPLE_RATE = ASR_INFERENCE_CONTRACT.sampleRate;
 const STDERR_LIMIT = 8_000;
 const WHISPER_CLI_TIMEOUT_MS = 45 * 60 * 1000;
+
+/**
+ * Initial prompt (`--prompt`) that biases Whisper's decoder toward product
+ * vocabulary, so "arrowlogy" is voiced as a known token instead of being
+ * decoded as a common word ("urology"). Only applied to English or
+ * auto-detected speech; other languages keep their own decoding untouched.
+ */
+const BRAND_VOCAB_PROMPT = 'Arrowlogy, OpenChatCut, captions, subtitle, SRT, timeline.';
+
+/** `OPENCHATCUT_ASR_PROMPT` overrides the bias prompt; empty string disables it. */
+function initialPrompt(): string | null {
+  const override = process.env.OPENCHATCUT_ASR_PROMPT;
+  if (override !== undefined) return override.trim().length > 0 ? override : null;
+  return BRAND_VOCAB_PROMPT;
+}
+
+function brandPromptArgs(language: string, prompt: string | null = initialPrompt()): readonly string[] {
+  if (prompt === null || prompt.trim().length === 0) return [];
+  const tag = language.trim().toLowerCase();
+  // whisperLanguage() yields 'en', 'auto' or a language code. Unspecified
+  // ('auto') is treated as English because this app defaults to English media.
+  if (tag !== '' && tag !== 'auto' && !tag.startsWith('en')) return [];
+  return ['--prompt', prompt];
+}
+
+function withBrandRepair(
+  result: { text: string; chunks: readonly DesktopAsrChunk[] },
+): { text: string; chunks: DesktopAsrChunk[] } {
+  return {
+    text: repairBrandTerms(result.text),
+    chunks: result.chunks.map((chunk) => ({ ...chunk, text: repairBrandTerms(chunk.text) })),
+  };
+}
 
 interface NativeWorkerData {
   readonly cacheDir: string;
@@ -125,6 +159,7 @@ function runWhisperCli(
   useGpu: boolean,
   signal?: AbortSignal,
   vad: readonly string[] = [],
+  initialPromptOverride?: string | null,
 ): Promise<{ jsonPath: string; stderr: string }> {
   return new Promise((resolve, reject) => {
     const args = [
@@ -136,6 +171,7 @@ function runWhisperCli(
       '-sow',
       '-ojf',
       '-nt',
+      ...brandPromptArgs(language, initialPromptOverride),
       '-of', wavPath,
       ...vad,
     ];
@@ -312,8 +348,7 @@ async function transcribeWithEngine(
       return {
         requestId: request.requestId,
         backend: engine.backend,
-        text,
-        chunks,
+        ...withBrandRepair({ text, chunks }),
       };
     } catch {
       // 2. whisper-cli spawn fallback (Metal, then CPU).
@@ -336,8 +371,7 @@ async function transcribeWithEngine(
       return {
         requestId: request.requestId,
         backend,
-        text,
-        chunks,
+        ...withBrandRepair({ text, chunks }),
       };
     }
   } finally {
