@@ -81,10 +81,10 @@ export function whisperLanguage(language: string | undefined): string {
  * transcript still protect genuine "urology" mentions.
  */
 const ALWAYS_BRAND_TYPO_RE =
-  /\b(?:arrow\s*logy|arrowlogy|errowlogy|erowlogy|arowlogy|arrology)\b/gi;
-const UROLOGY_BRAND_MISHEAR_RE = /\burology\b/gi;
+  /\b(?:arrow[\s-]*logy|arrowology|errowlogy|erowlogy|arowlogy|arrology)\b/gi;
+const UROLOGY_BRAND_MISHEAR_RE = /\b(?:urology|orology|aurrology)\b/gi;
 const MEDICAL_CONTEXT_RE =
-  /\b(?:doctor|doctors|hospital|hospitals|kidney|kidneys|bladder|prostate|medical|medicine|patient|patients|clinic|clinics|surgery|surgical|surgeon|surgeons|urinary|urologist|urologists|physician|physicians|nephrology|oncology|renal|catheter|dialysis|nurse|nurses|diagnosis|treatment|symptom|symptoms)\b/i;
+  /\b(?:doctor|doctors|hospital|hospitals|kidney|kidneys|bladder|prostate|medical|medicine|patient|patients|clinic|clinics|surgery|surgical|surgeon|surgeons|urinary|urologist|urologists|physician|physicians|nephrology|oncology|renal|catheter|dialysis|nurse|nurses|diagnosis|treatment|symptom|symptoms|hematuria|cystoscopy|ureter|urethra|incontinence)\b/i;
 
 function looksMedical(scope: string): boolean {
   return MEDICAL_CONTEXT_RE.test(scope);

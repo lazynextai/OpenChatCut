@@ -215,5 +215,21 @@ assert.equal(
   'open Arrowlogy and export',
   'spaced "arrow logy" always becomes Arrowlogy',
 );
+assert.equal(
+  repairBrandTerms('try arrowology today'),
+  'try Arrowlogy today',
+  'arrowology typo always becomes Arrowlogy',
+);
+assert.equal(
+  repairBrandTerms('orology captions work offline'),
+  'Arrowlogy captions work offline',
+  'orology mishearing becomes Arrowlogy without medical context',
+);
+assert.equal(
+  repairBrandTerms('hematuria and urology follow-up'),
+  'hematuria and urology follow-up',
+  'extra medical cues keep urology',
+);
+
 
 console.log('native-asr-worker.verify: brand-term medical-safe repair OK');
