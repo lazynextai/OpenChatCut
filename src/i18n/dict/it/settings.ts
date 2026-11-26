@@ -10,6 +10,8 @@ const overrides: Record<string, string> = {
   '展开': 'Espandi',
   '显示明文': 'Mostra valori',
   '第三方字体许可': 'Licenze font di terze parti',
+  '第三方声明': 'Avvisi di terze parti',
+  '许可：AGPL-3.0-or-later · 源码：': 'Licenza: AGPL-3.0-or-later · Codice: ',
   '保存中…': 'Salvataggio...',
   '保存': 'Salva',
   '无法读取配置（dev 服务未就绪？）': 'Impossibile leggere la configurazione (servizio dev non pronto?)',
