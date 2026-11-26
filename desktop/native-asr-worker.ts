@@ -67,9 +67,15 @@ function brandPromptArgs(language: string, prompt: string | null = initialPrompt
 function withBrandRepair(
   result: { text: string; chunks: readonly DesktopAsrChunk[] },
 ): { text: string; chunks: DesktopAsrChunk[] } {
+  // Chunks are often a single word ("urology"); pass the full transcript so
+  // medical context elsewhere still blocks the specialty → brand rewrite.
+  const context = result.text;
   return {
     text: repairBrandTerms(result.text),
-    chunks: result.chunks.map((chunk) => ({ ...chunk, text: repairBrandTerms(chunk.text) })),
+    chunks: result.chunks.map((chunk) => ({
+      ...chunk,
+      text: repairBrandTerms(chunk.text, context),
+    })),
   };
 }
 

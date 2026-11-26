@@ -71,16 +71,32 @@ export function whisperLanguage(language: string | undefined): string {
 /**
  * Whole-word repairs for brand misspellings the small GGML model still emits
  * even with a vocabulary prompt (`--prompt`, verified: "urology", "Errowlogy").
- * Deliberately narrow, not a spell-checker: novel misspellings slip through,
- * and "urology" is also a real word, so a genuine mention of the medical
- * specialty would be rewritten as "Arrowlogy".
+ * Deliberately narrow, not a spell-checker: novel misspellings slip through.
+ *
+ * "urology" is both a common Whisper mishearing of "Arrowlogy" *and* a real
+ * medical specialty. Rewrite it only when the surrounding context does not
+ * look medical; clear brand typos (Errowlogy, arrow logy, …) always repair.
+ *
+ * Pass `context` when repairing a short chunk so medical cues from the full
+ * transcript still protect genuine "urology" mentions.
  */
-const BRAND_TERM_REPAIRS: readonly (readonly [RegExp, string])[] = [
-  [/\b(?:urology|arrow\s*logy|arrowlogy|errowlogy|erowlogy|arowlogy|arrology)\b/gi, 'Arrowlogy'],
-];
+const ALWAYS_BRAND_TYPO_RE =
+  /\b(?:arrow\s*logy|arrowlogy|errowlogy|erowlogy|arowlogy|arrology)\b/gi;
+const UROLOGY_BRAND_MISHEAR_RE = /\burology\b/gi;
+const MEDICAL_CONTEXT_RE =
+  /\b(?:doctor|doctors|hospital|hospitals|kidney|kidneys|bladder|prostate|medical|medicine|patient|patients|clinic|clinics|surgery|surgical|surgeon|surgeons|urinary|urologist|urologists|physician|physicians|nephrology|oncology|renal|catheter|dialysis|nurse|nurses|diagnosis|treatment|symptom|symptoms)\b/i;
 
-export function repairBrandTerms(text: string): string {
-  return BRAND_TERM_REPAIRS.reduce((value, [pattern, replacement]) => value.replace(pattern, replacement), text);
+function looksMedical(scope: string): boolean {
+  return MEDICAL_CONTEXT_RE.test(scope);
+}
+
+export function repairBrandTerms(text: string, context?: string): string {
+  const scope = context ?? text;
+  let value = text.replace(ALWAYS_BRAND_TYPO_RE, 'Arrowlogy');
+  if (!looksMedical(scope)) {
+    value = value.replace(UROLOGY_BRAND_MISHEAR_RE, 'Arrowlogy');
+  }
+  return value;
 }
 
 // whisper.cpp emits BPE tokens, not words: only a token whose raw text begins

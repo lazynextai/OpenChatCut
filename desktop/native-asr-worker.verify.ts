@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {
   nativeGgmlFileName,
+  repairBrandTerms,
   whisperServerVadArgs,
   whisperTokensToChunks,
   whisperVadArgs,
@@ -186,3 +187,33 @@ assert.deepEqual(
 assert.equal(whisperWordsToChunks(undefined).length, 0, 'missing words yield no chunks');
 
 console.log('native-asr-worker.verify: whisper server words projection OK');
+
+// Brand-term repair: Whisper often emits "urology" / "Errowlogy" for Arrowlogy.
+// Bare product-caption phrasing should rewrite; medical context must keep "urology".
+assert.equal(
+  repairBrandTerms('Add captions in urology'),
+  'Add captions in Arrowlogy',
+  'bare "urology" mishearing becomes Arrowlogy',
+);
+assert.equal(
+  repairBrandTerms('visit the urology clinic tomorrow'),
+  'visit the urology clinic tomorrow',
+  'medical "urology clinic" stays urology',
+);
+assert.equal(
+  repairBrandTerms('urology', 'schedule a visit at the urology clinic'),
+  'urology',
+  'chunk repair uses full-transcript medical context',
+);
+assert.equal(
+  repairBrandTerms('Try Errowlogy captions at the urology clinic'),
+  'Try Arrowlogy captions at the urology clinic',
+  'clear brand typos always repair; medical urology is preserved',
+);
+assert.equal(
+  repairBrandTerms('open arrow logy and export'),
+  'open Arrowlogy and export',
+  'spaced "arrow logy" always becomes Arrowlogy',
+);
+
+console.log('native-asr-worker.verify: brand-term medical-safe repair OK');
